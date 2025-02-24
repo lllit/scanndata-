@@ -1,0 +1,5 @@
+flet
+pytesseract
+python-dotenv
+opencv-python
+pypdf

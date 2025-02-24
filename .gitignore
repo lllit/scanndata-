@@ -1,0 +1,12 @@
+.env
+.venv
+storage/
+__pycache__
+
+*/__pycache__
+
+Tesseract-OCR
+Tesseract-OCR/*
+storage
+
+data/*
