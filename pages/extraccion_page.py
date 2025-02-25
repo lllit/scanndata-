@@ -1,6 +1,6 @@
 import flet as ft
 import json
-
+import os
 
 from pages.send_email_page import SendEmailPage
 
@@ -10,10 +10,12 @@ from utils.llm import llm_ordenar_texto, reformular_respuesta_send
 from utils.send_email import send_email
 
 
+# Obtener la ruta del ejecutable
+# base_path = os.path.dirname(os.path.abspath(__file__))
+# #tesseract_path = os.path.join(base_path, 'Tesseract-OCR', 'tesseract.exe')
 
 
-
-def ExtractPage(page):
+def ExtractPage(page,cambiar_pagina):
     titulo = ft.Text("Extracción de data", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     texto_subid = ft.Text("Sube una imagen o un PDF:")
 
@@ -71,6 +73,7 @@ def ExtractPage(page):
 
 
 
+
     def opendialog(titulo_dialogo, content_dialogo):
         dlg = ft.AlertDialog(
             title=ft.Text(titulo_dialogo),
@@ -83,9 +86,28 @@ def ExtractPage(page):
 
 
     def go_to_send_email_page(e):
-        page.controls.clear()
+        page.controls = page.controls[:2]
         
-        page.add(SendEmailPage(page))
+        # Crear el botón de volver
+        back_button = ft.IconButton(
+            icon=ft.Icons.ARROW_BACK,
+            on_click=lambda e: cambiar_pagina(1)
+        )
+        # Agregar el botón de volver y la página de envío de correo
+        page.add(
+            ft.Row(
+                controls=[back_button],
+                alignment=ft.MainAxisAlignment.START
+            )
+        )
+        page.controls[1].controls.clear()
+        page.controls[1].controls.append(
+            ft.Row(
+                controls=[back_button],
+                alignment=ft.MainAxisAlignment.START
+            )
+        )
+        page.controls[1].controls.append(SendEmailPage(page))
         page.update()
 
 
@@ -94,7 +116,6 @@ def ExtractPage(page):
 
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True, disabled=True)
     rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True)
-    #email_checkbox = ft.Checkbox(label="Enviar por Gmail", on_change=toggle_email_fields,disabled=True)
     email_button = ft.ElevatedButton("Enviar por Gmail", on_click=go_to_send_email_page, disabled=True)
 
 

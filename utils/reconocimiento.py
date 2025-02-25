@@ -9,9 +9,24 @@ import io
 from PIL import Image
 
 load_dotenv()
-path_exe = os.getenv("TESSERACT_CMD")
 
+# path_exe = os.getenv("TESSERACT_CMD")
+
+# pytesseract.pytesseract.tesseract_cmd = path_exe
+
+
+
+
+def find_tesseract():
+    default_path = os.path.expanduser(r'~\AppData\Local\Programs\Tesseract-OCR\tesseract.exe')
+    if os.path.exists(default_path):
+        return default_path
+    return None
+
+path_exe = find_tesseract()
 pytesseract.pytesseract.tesseract_cmd = path_exe
+
+print(f"Path Exe: {path_exe}")
 
 def extract_data_from_image(path_file):
 
@@ -48,3 +63,5 @@ def extract_imagenes_pdf(file):
     return image_list
 
 
+# Mantener la consola abierta
+#input("Presiona Enter para salir...")

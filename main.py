@@ -1,9 +1,12 @@
 import flet as ft
-
+import os
+import subprocess
 
 from pages.home import HomePage
 from pages.extraccion_page import ExtractPage
 from pages.extraccion_imagenes_pdf import ExtractImgPage
+
+
 
 
 def main(page: ft.Page):
@@ -11,14 +14,15 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.START
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.AUTO
+    
+    global cambiar_pagina
 
-
-    def cambiar_pagina(e):
-        if e.control.selected_index == 0:
+    def cambiar_pagina(index):
+        if index == 0:
             page.controls[1] = HomePage()
-        elif e.control.selected_index == 1:
-            page.controls[1] = ExtractPage(page)
-        elif e.control.selected_index == 2:
+        elif index == 1:
+            page.controls[1] = ExtractPage(page,cambiar_pagina)
+        elif index == 2:
             page.controls[1] = ExtractImgPage(page)
         page.update()
 
@@ -29,7 +33,7 @@ def main(page: ft.Page):
             ft.NavigationBarDestination(icon=ft.Icons.DATA_EXPLORATION, label="Función Extract"),
             ft.NavigationBarDestination(icon=ft.Icons.DATA_ARRAY, label="Extraccion de imagenes en pdf"),
         ],
-        on_change=cambiar_pagina,
+        on_change=lambda e: cambiar_pagina(e.control.selected_index),
         bgcolor=ft.Colors.BLACK12
     )
 
@@ -45,12 +49,7 @@ def main(page: ft.Page):
 
 
 
-ft.app(target=main,assets_dir="assets")
+#ft.app(target=main,assets_dir="assets")
 
 if __name__ == "__main__":
-    ft.Window(
-        title="Extracción de data",
-        target=main,
-        assets_dir="assets",
-        icon="assets/favicon.ico"
-    ).run()
+    ft.app(target=main, assets_dir="assets")

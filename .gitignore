@@ -10,3 +10,8 @@ Tesseract-OCR/*
 storage
 
 data/*
+
+build
+installers
+
+dist
