@@ -9,10 +9,8 @@ from utils.llm import llm_ordenar_texto, reformular_respuesta_send
 
 from utils.send_email import send_email
 
+from assets.styles.styles import PADDING_TOP
 
-# Obtener la ruta del ejecutable
-# base_path = os.path.dirname(os.path.abspath(__file__))
-# #tesseract_path = os.path.join(base_path, 'Tesseract-OCR', 'tesseract.exe')
 
 
 def ExtractPage(page,cambiar_pagina):
@@ -86,28 +84,25 @@ def ExtractPage(page,cambiar_pagina):
 
 
     def go_to_send_email_page(e):
-        page.controls = page.controls[:2]
-        
-        # Crear el botón de volver
-        back_button = ft.IconButton(
-            icon=ft.Icons.ARROW_BACK,
-            on_click=lambda e: cambiar_pagina(1)
+        # Mantener la barra de navegación y solo actualizar el contenido principal
+        page.controls[1] = ft.Column(
+            controls=[
+                ft.Row(
+                    controls=[
+                        ft.IconButton(
+                            icon=ft.Icons.ARROW_BACK,
+                            on_click=lambda e: cambiar_pagina(1)
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.START
+                ),
+                ft.Container(
+                    content=SendEmailPage(page),
+                    alignment=ft.alignment.center
+                ),
+                
+            ]
         )
-        # Agregar el botón de volver y la página de envío de correo
-        page.add(
-            ft.Row(
-                controls=[back_button],
-                alignment=ft.MainAxisAlignment.START
-            )
-        )
-        page.controls[1].controls.clear()
-        page.controls[1].controls.append(
-            ft.Row(
-                controls=[back_button],
-                alignment=ft.MainAxisAlignment.START
-            )
-        )
-        page.controls[1].controls.append(SendEmailPage(page))
         page.update()
 
 
@@ -136,7 +131,8 @@ def ExtractPage(page,cambiar_pagina):
 
     page.overlay.append(file_picker)
 
-    return ft.Column(
+
+    ui_principal = ft.Column(
         controls=[
             titulo,
             texto_subid,
@@ -164,3 +160,14 @@ def ExtractPage(page,cambiar_pagina):
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
+
+
+    return ft.Container(
+        content=(
+            ui_principal
+        ),
+        padding=ft.padding.only(top=PADDING_TOP)
+
+    )
+
+   

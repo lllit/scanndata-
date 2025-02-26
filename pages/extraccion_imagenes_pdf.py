@@ -2,6 +2,10 @@ import flet as ft
 
 from utils.reconocimiento import extract_imagenes_pdf
 
+
+from assets.styles.styles import PADDING_TOP
+
+
 def ExtractImgPage(page):
     titulo = ft.Text("Extraccion de imagenes en PDF", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True)
@@ -46,8 +50,8 @@ def ExtractImgPage(page):
     )
 
 
-
-    return ft.Column(
+    def ui_extraccion_img_pdf():
+        return ft.Column(
         controls=[
             titulo,
             ft.ElevatedButton("Seleccionar archivo PDF", on_click=lambda _: file_picker.pick_files()),
@@ -55,4 +59,11 @@ def ExtractImgPage(page):
             text_area
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+    return ft.Container(
+        content=(
+            ui_extraccion_img_pdf()   
+        ),
+        padding=ft.padding.only(top=PADDING_TOP)
     )

@@ -1,6 +1,9 @@
 import flet as ft
 
-def HomePage():
+from assets.styles.styles import PADDING_TOP
+
+
+def saludo_bienvenida():
     return ft.Column(
         controls=[
             ft.Text("¡Hola!", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
@@ -8,4 +11,13 @@ def HomePage():
         ], 
         
         alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+def HomePage():
+    return ft.Container(
+        content=(
+            saludo_bienvenida()
+        ),
+        padding=ft.padding.only(top=PADDING_TOP)
+
     )
