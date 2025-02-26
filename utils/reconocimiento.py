@@ -24,6 +24,13 @@ def find_tesseract():
     return None
 
 path_exe = find_tesseract()
+
+if not path_exe:
+    # Ejecutar el script de instalación de Tesseract
+    os.system("powershell -ExecutionPolicy Bypass -File install_tesseract.ps1")
+    path_exe = find_tesseract()
+
+
 pytesseract.pytesseract.tesseract_cmd = path_exe
 
 print(f"Path Exe: {path_exe}")
