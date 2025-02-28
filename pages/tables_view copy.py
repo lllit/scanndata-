@@ -1,11 +1,10 @@
 import flet as ft
 from datetime import date
-import gspread
 
 from utils.constantes import *
 from assets.styles.styles import *
 
-from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
+from utils.google_sheets_actions import GoogleSheet
 from utils.exportacion import export_data_to_csv,export_data_to_pdf
 from utils.dialog import opendialog
 
@@ -17,146 +16,46 @@ URL_EXPORT = "files_export/"
 
 
 def TablesPage(page):
-    titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
-
-    current_google_sheet = google_sheet[0]
-
-    gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
-    all_sheets = gs_general.get_all_sheets()
-    print(all_sheets)
-
-    current_sheet_name = all_sheets[0]
-    gs = GoogleSheet(file_name_gs, current_google_sheet, current_sheet_name)
-
-
-    print(f"Current {current_google_sheet}")
+    titulo = ft.Text(f"Tabla de datos", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     
+    sheet_name = "facturas_boletas"    
 
-    # --------------------------------------------
+    gs = GoogleSheet(file_name_gs, google_sheet, sheet_name)
 
-    def load_data(google_sheet, new_current_sheet_name):
-        print("LOAD DATA "+google_sheet)
+    all_sheets = gs.get_all_sheets()
+    #print(all_sheets)
 
-        try:
-            
-            gs_general = GoogleSheetGeneral(file_name_gs, google_sheet)
-            all_sheets = gs_general.get_all_sheets()
-            print("all_sheets "+all_sheets[0])
-            current_sheet_name = all_sheets[0]
-            
-            
-            #current_sheet_name = new_current_sheet_name
-            print("LOAD current_sheet_name ", current_sheet_name)
-            print("LOAD new_current_sheet_name ", new_current_sheet_name)
 
-            gs.sheet = gs.sh.worksheet(new_current_sheet_name)
 
-        except gspread.exceptions.WorksheetNotFound:
-            print(f"Worksheet '{current_sheet_name}' not found.")
-            return [], []
-
+    def load_data():
+        # Obtén todos los valores de la hoja
         data = gs.get_all_values()
-        if not data:
-            return [], []
-        
-        columns = [ft.DataColumn(ft.Text(col)) for col in data[0].keys()]
-
         rows = [
             ft.DataRow(
-                cells=[ft.DataCell(ft.Text(str(value))) for value in row.values()]
+                cells=[
+                    ft.DataCell(ft.Text(row["rut_emisor"])),
+                    ft.DataCell(ft.Text(row["razon_social_emisor"])),
+                    ft.DataCell(ft.Text(row["folio_dte"])),
+                    ft.DataCell(ft.Text(row["fecha_factura_boleta"])),
+                    ft.DataCell(ft.Text(row["monto"])),
+                    ft.DataCell(ft.Text(row["primer_item"])),
+                    ft.DataCell(ft.Row(
+                        controls=[
+                            ft.IconButton(icon=ft.Icons.EDIT, on_click=lambda e, row=row: open_edit_dialog(row)),
+                            ft.IconButton(icon=ft.Icons.DELETE, on_click=lambda e, row=row: open_delete_dialog(row), icon_color=ft.Colors.RED_400)
+                        ]
+                    ))
+                ],
             ) for row in data
         ]
-        return columns, rows
+        return rows
 
-        
-
-    def update_table(google_sheet,new_current_sheet_name):
-        
-        columns, rows = load_data(google_sheet,new_current_sheet_name)
-
-        if not columns:
-            columns = [ft.DataColumn(ft.Text("Sin información"))]
-            rows = [ft.DataRow(cells=[ft.DataCell(ft.Text(f"No hay data en la hoja: {current_sheet_name}"))])]
-
-        table.columns = columns
-        table.rows = rows
+    def update_table():
+        table.rows = load_data()
         page.update()
 
-
-
-    def on_sheet_selected(e):
-        new_current_sheet_name = e.control.content.value
-        
-
-        print(f"ON SHEET SELECT {new_current_sheet_name}")
-        update_table(current_google_sheet,new_current_sheet_name)
-
-
-    def on_database_selected(google_sheet):
-        nonlocal current_google_sheet, gs, current_sheet_name
-        try:
-            print(f"GoogleSheet {google_sheet}")
-            current_google_sheet = google_sheet 
-            
-            gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
-            all_sheets = gs_general.get_all_sheets()
-            print("on_database_selected all_sheets ",all_sheets[0])
-            gs = GoogleSheet(file_name_gs, current_google_sheet, all_sheets[0])
-            
-            
-            update_table(current_google_sheet, all_sheets[0])
-
-            sheet_menu_items = [
-                ft.MenuItemButton(
-                    content=ft.Text(sheet),
-                    on_click=on_sheet_selected
-                ) for sheet in all_sheets
-            ]
-            menubartabla.controls[1].controls = sheet_menu_items
-            page.update()
-        except gspread.exceptions.WorksheetNotFound:
-            print(f"Database '{current_sheet_name}' not found.")
-
-
-    database_menu_items = [
-        ft.MenuItemButton(
-            content=ft.Text(sheet),
-            on_click=lambda e, sheet=sheet: on_database_selected(sheet)
-        ) for sheet in google_sheet
-    ]
-
     
 
-    menubartabla.controls[0].controls = database_menu_items
-
-
-    sheet_menu_items = [
-        ft.MenuItemButton(
-            content=ft.Text(sheet),
-            on_click=on_sheet_selected
-        ) for sheet in all_sheets
-    ]
-
-    menubartabla.controls[1].controls = sheet_menu_items
-    
-
-
-
-    initial_columns, initial_rows = load_data(current_google_sheet, current_sheet_name)
-
-    if not initial_columns:
-        initial_columns = [ft.DataColumn(ft.Text("Sin información"))]
-        initial_rows = [ft.DataRow(cells=[ft.DataCell(ft.Text(f"No hay data en la hoja: {current_sheet_name}"))])]
-
-    table = ft.DataTable(
-        columns=initial_columns,
-        rows=initial_rows,
-        horizontal_lines=ft.BorderSide(1,"gray"),
-        vertical_lines=ft.BorderSide(1, "gray"),
-    )
-    
-
-    # --------------------------------------------
     fecha_exportacion = date.today()
 
     def on_save_location_selected(e):
@@ -220,7 +119,6 @@ def TablesPage(page):
         )
         page.open(dlg)
         page.update()
-        update_table(gs.sheet.title)
 
 
 
@@ -245,8 +143,24 @@ def TablesPage(page):
         page.update()
 
 
-    
-    
+
+    table = ft.DataTable(
+                columns=[
+                    ft.DataColumn(ft.Text("RUT Emisor",max_lines=2, no_wrap=True)),
+                    ft.DataColumn(ft.Text("Razón Social Emisor",max_lines=2, no_wrap=True)),
+                    ft.DataColumn(ft.Text("Folio DTE",max_lines=2, no_wrap=True)),
+                    ft.DataColumn(
+                        ft.Text("Fecha Factura/Boleta",max_lines=2, no_wrap=True)
+                        
+                    ),
+                    ft.DataColumn(ft.Text("Monto",max_lines=2, no_wrap=True), numeric=True),
+                    ft.DataColumn(ft.Text("Primer Ítem",max_lines=2, no_wrap=True)),
+                    ft.DataColumn(ft.Text("Acciones", max_lines=2, no_wrap=True))
+                ],
+                rows=load_data(),
+                horizontal_lines=ft.BorderSide(1,"gray"),
+                vertical_lines=ft.BorderSide(1, "gray"),
+            )
 
     
 

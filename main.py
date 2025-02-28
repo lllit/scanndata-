@@ -30,6 +30,7 @@ def main(page: ft.Page):
         page.update()
 
     drawer = create_navigation_drawer(page, cambiar_pagina)
+    
     page.appbar = ft.AppBar(
         title=ft.Text("ScannData", weight=ft.FontWeight.W_500),
         leading=open_menu_lateral(page, drawer),

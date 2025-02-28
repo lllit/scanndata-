@@ -53,3 +53,18 @@ class GoogleSheet:
         #self.sheet.get_all_values () # this return a list of list, so the get all records is easier to get values filtering
         return self.sheet.get_all_records() # this return a list of dictioraies so the key is the name column and the value is the value for that particular column
     
+    def get_all_sheets(self):
+        sheets = self.sh.worksheets()
+        sheet_names = [sheet.title for sheet in sheets]
+        return sheet_names
+
+
+class GoogleSheetGeneral:
+    def __init__(self,file_name,document):
+        self.gc = gspread.service_account(filename=file_name)
+        self.sh = self.gc.open(document)
+
+    def get_all_sheets(self):
+        sheets = self.sh.worksheets()
+        sheet_names = [sheet.title for sheet in sheets]
+        return sheet_names
