@@ -1,5 +1,5 @@
 [project]
-name = "Ext Data 0.1"
+name = "ScannData v0.1"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -26,11 +26,11 @@ web = true
 
 
 [tool.flet]
-org = "com.extdata"
+org = "com.scanndata"
 
 # project display name that is used as an app title on Android and iOS home screens,
 # shown in window titles and about app dialogs on desktop.
-product = "Ext Data v0.1"
+product = "Scann Data v0.1"
 
 # company name to display in about app dialogs
 company = "LLLIT"

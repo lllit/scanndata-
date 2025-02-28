@@ -1,7 +1,7 @@
 
-# Bienvenido a ExtData
+# Bienvenido a ScannData
 
-**ExtData** es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.
+**ScannData** es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.
 
 ## Funcionalidades Principales
 
@@ -12,15 +12,15 @@
 
 ## ¿A Quién Está Dirigida?
 
-ExtData está diseñada tanto para usuarios individuales como para empresas que buscan una gestión eficiente de boletas y facturas. Es especialmente útil para personas que trabajan con información o datos de manera regular.
+ScannData está diseñada tanto para usuarios individuales como para empresas que buscan una gestión eficiente de boletas y facturas. Es especialmente útil para personas que trabajan con información o datos de manera regular.
 
 ## Mensaje de Bienvenida
 
-¡Bienvenido a ExtData! Estamos aquí para ayudarte a simplificar y automatizar la gestión de tus documentos. Explora nuestras funcionalidades y descubre cómo podemos facilitar tu trabajo diario.
+¡Bienvenido a ScannData! Estamos aquí para ayudarte a simplificar y automatizar la gestión de tus documentos. Explora nuestras funcionalidades y descubre cómo podemos facilitar tu trabajo diario.
 
 ---
 
-Esperamos que disfrutes de tu experiencia con ExtData. Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos.
+Esperamos que disfrutes de tu experiencia con ScannData. Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos.
 
 
 
@@ -58,6 +58,12 @@ Se podra guardar la informacion que se requiera directamente hacia:
 
 -----------
 
+Actualizaciones futuras
+- Incorporar google calender
+Notificacion de ciertas fechas
 
+- Graficos interactivos
+Con la data que se exportara (CSV)
 
-¡Gracias por elegir ExtData!
+--------------
+¡Gracias por elegir ScannData!

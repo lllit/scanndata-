@@ -27,12 +27,20 @@ class GoogleSheet:
         """
         self.sheet.update(range, values)
 
-    def write_data_by_uid(self, uid, values): 
+    def write_data_by_uid(self, uid, values):
         # Find the row index based on the UID
         cell = self.sheet.find(uid)
         row_index = cell.row
         # Update the row with the specified values
-        self.sheet.update(f"A{row_index}:E{row_index}", values)
+        self.sheet.update(values=[values], range_name=f"B{row_index}:G{row_index}")
+
+    def delete_row_by_uid(self, uid):
+        # Find the row index based on the UID
+        cell = self.sheet.find(uid)
+        row_index = cell.row
+        # Delete the row
+        self.sheet.delete_rows(row_index)
+
 
     def get_last_row_range(self):   
         last_row = len(self.sheet.get_all_values()) + 1

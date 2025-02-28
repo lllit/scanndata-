@@ -7,14 +7,14 @@ from pages.extraccion_page import ExtractPage
 from pages.extraccion_imagenes_pdf import ExtractImgPage
 from pages.tables_view import TablesPage
 
-
+from utils.openmenu import create_navigation_drawer,open_menu_lateral
 
 def main(page: ft.Page):
-    page.title = "ExtData 0.1"
+    page.title = "ScannData 0.1"
     page.vertical_alignment = ft.MainAxisAlignment.START
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.AUTO
-
+    
 
     global cambiar_pagina
 
@@ -29,6 +29,13 @@ def main(page: ft.Page):
             page.controls[1] = ExtractImgPage(page)
         page.update()
 
+    drawer = create_navigation_drawer(page, cambiar_pagina)
+    page.appbar = ft.AppBar(
+        title=ft.Text("ScannData", weight=ft.FontWeight.W_500),
+        leading=open_menu_lateral(page, drawer),
+        title_spacing=ft.padding.only(top=3)
+    )
+    page.drawer = drawer
 
     nav_bar = ft.NavigationBar(
         destinations=[
@@ -53,7 +60,6 @@ def main(page: ft.Page):
 
 
 
-#ft.app(target=main,assets_dir="assets")
 
 if __name__ == "__main__":
     ft.app(target=main, assets_dir="assets")

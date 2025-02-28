@@ -1,6 +1,8 @@
 import flet as ft
 
+
 from assets.styles.styles import PADDING_TOP
+
 
 
 
@@ -9,12 +11,12 @@ def interfaze_informativo():
         content=ft.Column(
             controls=[
                 ft.Container(
-                    content=ft.Text("Bienvenido a ExtData!",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
+                    content=ft.Text("Bienvenido a ScannData!",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
                     
                     alignment=ft.alignment.center
                 ),
                 ft.Text(
-                    value="ExtData es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.",
+                    value="ScannData es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.",
                     size=17,
                     weight=ft.FontWeight.W_400
                 ),
@@ -87,7 +89,9 @@ def HomePage(page):
         animate_scale=ft.animation.Animation(1000, ft.AnimationCurve.EASE_IN_OUT_SINE)
     )
 
-   
+
+
+    
 
     def saludo_bienvenida():
         return ft.Column(
@@ -109,6 +113,7 @@ def HomePage(page):
 
     
     return ft.Container(
+        
         content=ft.Column(
             controls=[
                     saludo_bienvenida(),

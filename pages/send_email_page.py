@@ -1,7 +1,6 @@
 import flet as ft
 from utils.send_email import send_email
 
-
 def SendEmailPage(page):
     titulo = ft.Text("Enviar Correo", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     subject_field = ft.TextField(label="Asunto", width=600)

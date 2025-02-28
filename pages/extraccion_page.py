@@ -7,14 +7,10 @@ from pages.send_email_page import SendEmailPage
 
 from utils.reconocimiento import extract_data_from_image, extract_text_from_pdf
 from utils.llm import llm_ordenar_texto, reformular_respuesta_send
-
 from utils.send_email import send_email
-
 from assets.styles.styles import PADDING_TOP
-
-
 from utils.google_sheets_actions import GoogleSheet
-
+from utils.dialog import opendialog
 
 
 # -------------------------------
@@ -85,7 +81,7 @@ def ExtractPage(page,cambiar_pagina):
                 
                 
                 text_area.value = "Error al procesar la respuesta del LLM"
-                page.open(opendialog("Error!","Error al procesar la respuesta"))
+                page.open(opendialog(page,"Error!","Error al procesar la respuesta"))
 
             #email_checkbox.disabled = False
             page.update()
@@ -93,7 +89,7 @@ def ExtractPage(page,cambiar_pagina):
 
     def on_send_email(e):
         send_email(subject_field.value, text_area.value, recipient_field.value,page.selected_file_path)
-        page.open(opendialog("Correo enviado!","El correo ha sido enviado exitosamente!"))
+        page.open(opendialog(page,"Correo enviado!","El correo ha sido enviado exitosamente!"))
 
     def registrar_bd(e):
 
@@ -116,19 +112,11 @@ def ExtractPage(page,cambiar_pagina):
 
         range = google.get_last_row_range()
         google.write_data(range,value)
-        page.open(opendialog("Registro exitoso!", "Los datos han sido registrados en Google Sheets."))
+        page.open(opendialog(page,"Registro exitoso!", "Los datos han sido registrados en Google Sheets."))
 
 
 
-    def opendialog(titulo_dialogo, content_dialogo):
-        dlg = ft.AlertDialog(
-            title=ft.Text(titulo_dialogo),
-            content=ft.Text(content_dialogo),
-            actions=[ft.TextButton("OK", on_click=lambda e: page.close(dlg))],
-            actions_alignment=ft.MainAxisAlignment.END,
-        ) 
-        page.update()
-        return dlg
+    
 
 
     def go_to_send_email_page(e):
@@ -196,6 +184,7 @@ def ExtractPage(page,cambiar_pagina):
 
     ui_principal = ft.Column(
         controls=[
+            
             titulo,
             texto_subid,
             ft.ElevatedButton("Seleccionar archivo", on_click=lambda _: file_picker.pick_files()),
@@ -226,9 +215,11 @@ def ExtractPage(page,cambiar_pagina):
 
 
     return ft.Container(
-        content=(
-            ui_principal
-        ),
+        content=ft.Column(
+                controls=[
+                    ui_principal
+                ]
+            ),
         padding=ft.padding.only(top=PADDING_TOP)
 
     )

@@ -1,14 +1,13 @@
 import flet as ft
 
 from utils.reconocimiento import extract_imagenes_pdf
-
-
+from utils.dialog import opendialog
 from assets.styles.styles import PADDING_TOP
 
 
 def ExtractImgPage(page):
     titulo = ft.Text("Extraccion de imagenes en PDF", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
-    text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True)
+    text_area = ft.TextField(value="", multiline=True, read_only=True, border=None, border_width=0)
 
 
     page.selected_file_path = None
@@ -20,6 +19,7 @@ def ExtractImgPage(page):
             page.selected_file_path = file_path
             images = extract_imagenes_pdf(file_path)
             text_area.value = f"Se han extraído {len(images)} imágenes del PDF."
+            save_btn.disabled = False
             page.update()
 
     def on_save_location_selected(e):
@@ -31,39 +31,46 @@ def ExtractImgPage(page):
                     image.save(f"{e.path}/image_{i+1}.{ext}")
                 text_area.value = f"Imágenes guardadas en {e.path}."
                 page.update()
-                page.open(dlg)
+                page.open(opendialog(page,
+                                     "Imagenes exportadas exitosamente!",
+                                     f"Imágenes guardadas en {e.path}.")
+                )
 
 
     file_picker = ft.FilePicker(on_result=on_file_upload)
     save_picker = ft.FilePicker(on_result=on_save_location_selected)
 
+
+    save_btn = ft.IconButton(
+                    icon=ft.Icons.SAVE,
+                    on_click=lambda _: save_picker.get_directory_path(),
+                    tooltip="Seleccionar ubicación para guardar imágenes",
+                    disabled=True
+                )
+
     # Agregar los FilePickers a la página
     page.overlay.append(file_picker)
     page.overlay.append(save_picker)
 
-    # Crear el AlertDialog
-    dlg = ft.AlertDialog(
-        title=ft.Text("Guardado exitoso"),
-        content=ft.Text("Las imágenes se han guardado correctamente."),
-        actions=[ft.TextButton("OK", on_click=lambda e: page.close(dlg))],
-        actions_alignment=ft.MainAxisAlignment.END,
-    )
+    
 
 
     def ui_extraccion_img_pdf():
         return ft.Column(
-        controls=[
-            titulo,
-            ft.ElevatedButton("Seleccionar archivo PDF", on_click=lambda _: file_picker.pick_files()),
-            ft.ElevatedButton("Seleccionar ubicación para guardar imágenes", on_click=lambda _: save_picker.get_directory_path()),
-            text_area
-        ],
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            controls=[
+                titulo,
+                ft.ElevatedButton("Seleccionar archivo PDF", on_click=lambda _: file_picker.pick_files()),
+                text_area,
+                save_btn
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
     return ft.Container(
-        content=(
-            ui_extraccion_img_pdf()   
+        content=ft.Column(
+            controls=[
+                ui_extraccion_img_pdf()
+            ],
         ),
         padding=ft.padding.only(top=PADDING_TOP)
     )
