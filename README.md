@@ -56,14 +56,5 @@ Se podra guardar la informacion que se requiera directamente hacia:
 
 
 
------------
-
-Actualizaciones futuras
-- Incorporar google calender
-Notificacion de ciertas fechas
-
-- Graficos interactivos
-Con la data que se exportara (CSV)
-
 --------------
 ¡Gracias por elegir ScannData!

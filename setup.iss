@@ -12,5 +12,5 @@ Source: "build\windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: "installers\Tesseract-OCR\installer_tesseract.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Run]
-Filename: "{app}\scanndata.exe"; Description: "Abrir aplicación"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\scanndata_v01.exe"; Description: "Abrir aplicación"; Flags: nowait postinstall skipifsilent
 Filename: "{tmp}\installer_tesseract.exe"; Parameters: "/silent"; Flags: waituntilterminated

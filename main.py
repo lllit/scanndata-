@@ -35,7 +35,6 @@ def main(page: ft.Page):
         leading=open_menu_lateral(page, drawer),
         title_spacing=ft.padding.only(top=3)
     )
-    page.drawer = drawer
 
     nav_bar = ft.NavigationBar(
         destinations=[

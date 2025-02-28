@@ -147,7 +147,6 @@ def ExtractPage(page,cambiar_pagina):
 
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True, disabled=True)
     rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True)
-    #email_button = ft.ElevatedButton("Enviar por Gmail", on_click=go_to_send_email_page, disabled=True)
     btn_email_icon = ft.IconButton(
                     icon=ft.Icons.EMAIL,
                     icon_color="blue400",

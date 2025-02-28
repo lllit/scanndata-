@@ -48,17 +48,27 @@ def TablesPage(page):
     
 
     fecha_exportacion = date.today()
+
     #print(data)
+    def on_save_location_selected(e):
+        if e.path:
+            folder_path = e.path
+            data = gs.get_all_values()
+            export_data_to_csv(data, f"{folder_path}\\{fecha_exportacion}_data.csv")
+            page.open(opendialog(page, "Datos exportados a CSV", f"Guardados en: {folder_path}\\{fecha_exportacion}_data.csv"))
+            page.update()
+
+    
+    file_picker = ft.FilePicker(on_result=on_save_location_selected)
+    page.overlay.append(file_picker)
+
     def on_export_click(e):
-        data = gs.get_all_values()
-        export_data_to_csv(data, f"{URL_EXPORT}{fecha_exportacion}_data.csv")
-        page.open(opendialog(page,"Datos exportados a CSV",f"Guardadados en: {URL_EXPORT}{fecha_exportacion}_data.csv"))
-        
-        page.update()
+        file_picker.get_directory_path()
+
+
 
     def open_edit_dialog(row_data):
         
-
 
         def on_save_click(e):
             gs.write_data_by_uid(row_data["uid"], [
@@ -70,7 +80,6 @@ def TablesPage(page):
                 primer_item.value
             ])
             page.open(opendialog(page,"Datos actualizados!","Datos actualizados!"))
-            ui_principal.update()
             page.close(dlg)
             update_table()
 
@@ -126,27 +135,6 @@ def TablesPage(page):
 
 
 
-    #print("DATA: ",data)
-    # rows = [
-    #     ft.DataRow(
-    #         cells=[
-    #             ft.DataCell(ft.Text(row["rut_emisor"])),
-    #             ft.DataCell(ft.Text(row["razon_social_emisor"])),
-    #             ft.DataCell(ft.Text(row["folio_dte"])),
-    #             ft.DataCell(ft.Text(row["fecha_factura_boleta"])),
-    #             ft.DataCell(ft.Text(row["monto"])),
-    #             ft.DataCell(ft.Text(row["primer_item"])),
-    #             ft.DataCell(ft.Row(
-    #                     controls=[
-    #                         ft.IconButton(icon=ft.Icons.EDIT, on_click=lambda e, row=row: open_edit_dialog(row)),
-    #                         ft.IconButton(icon=ft.Icons.DELETE, on_click=lambda e, row=row: open_delete_dialog(row),icon_color=ft.Colors.RED_400)
-    #                     ]
-    #                 )
-    #             )
-    #         ],
-    #     ) for row in data
-    # ]
-
     table = ft.DataTable(
                 columns=[
                     ft.DataColumn(ft.Text("RUT Emisor",max_lines=2, no_wrap=True)),
@@ -164,6 +152,8 @@ def TablesPage(page):
                 horizontal_lines=ft.BorderSide(1,"gray"),
                 vertical_lines=ft.BorderSide(1, "gray"),
             )
+
+    
 
     ui_principal = ft.Column(
         controls=[
@@ -197,3 +187,4 @@ def TablesPage(page):
         ),
         padding=ft.padding.only(top=PADDING_TOP)
     )
+
