@@ -5,7 +5,7 @@ def SendEmailPage(page):
     titulo = ft.Text("Enviar Correo", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     subject_field = ft.TextField(label="Asunto", width=600)
     recipient_field = ft.TextField(label="Destinatario", width=600)
-    text_area = ft.TextField(value=page.email_content, multiline=True, width=600, height=400, read_only=True)
+    text_area = ft.TextField(value=page.email_content, multiline=True, width=600, height=400, read_only=False)
     
     def on_send_email(e):
         send_email(subject_field.value, text_area.value, recipient_field.value, page.selected_file_path)
