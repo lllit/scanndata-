@@ -17,6 +17,9 @@ URL_EXPORT = "files_export/"
 
 
 def TablesPage(page):
+
+    
+
     titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
 
     current_google_sheet = google_sheet[0]
@@ -153,8 +156,12 @@ def TablesPage(page):
         rows=initial_rows,
         horizontal_lines=ft.BorderSide(1,"gray"),
         vertical_lines=ft.BorderSide(1, "gray"),
+        
     )
-    
+    scrollable_table = ft.Row(
+        controls=[table],
+        scroll=ft.ScrollMode.AUTO
+    )
 
     # --------------------------------------------
     fecha_exportacion = date.today()
@@ -254,7 +261,7 @@ def TablesPage(page):
         controls=[
             titulo,
             
-            table,
+            scrollable_table,
             ft.Container(
                 content=ft.Row(
                     controls=[

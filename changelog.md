@@ -10,6 +10,13 @@ agregar boton de edicion y eliminar
 
 
 
-- Mejoras futuras: agregar informacion que se recopile en el google calender (boleta/factura)
+- Mejoras futuras: 
+agregar informacion que se recopile en el google calender (boleta/factura)
+
+
+
 
 - Graficos interactivos: Con la data que se exportara (CSV)
+
+### Calandario
+cuando registre una boleta/factura/pdf en mi bd de google sheet tiene que registrar la fecha_factura_boleta (por ejemplo) tambien en mi tabla interna 'fechas importantes' para luego poder asociar esta tabla con el calendario

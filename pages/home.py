@@ -1,9 +1,45 @@
 import flet as ft
 
+from assets.styles.styles import colors
 
 from assets.styles.styles import PADDING_TOP
 
 
+
+
+
+
+def card_presentacion(icon, color_icon, title, subtitle, color_card:None):
+
+
+    return ft.Card(
+        content=ft.Container(
+            content=ft.Row(
+                [
+                    ft.Column(
+                        controls=[
+                            ft.Row(
+                                controls=[
+                                    ft.Icon(name=icon, color=color_icon),
+                                ],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                            ),
+                            ft.Text(title, size=15, weight=ft.FontWeight.W_600),
+                        ]
+                    ),
+                    
+                    ft.Text(subtitle, size=10),
+                    
+                ],
+                alignment=ft.alignment.center,
+                wrap=True
+            ),
+            padding=10
+        ),
+        color=color_card,
+        width=250,
+        height=250,
+    )
 
 
 def interfaze_informativo():
@@ -23,48 +59,43 @@ def interfaze_informativo():
                 ft.Divider(),
                 ft.ListView(
                     controls=[
-                        ft.Text("Funcionalidades Principales.", size=17, weight=ft.FontWeight.W_600),
-                        ft.Column(
+                        ft.Text("Funcionalidades Principales:", size=17, weight=ft.FontWeight.W_600),
+                        ft.Row(
                             controls=[
-                                ft.Row(
-                                    [
-                                        ft.Icon(name=ft.Icons.DOCUMENT_SCANNER, color=ft.Colors.PINK),
-                                        ft.Text("Extracción de Texto: Convierte imágenes y PDFs en texto", size=15),
-                                    ],
-                                    alignment=ft.alignment.center,
-                                    wrap=True
+                                card_presentacion(
+                                    icon=ft.Icons.DOCUMENT_SCANNER,
+                                    color_icon=ft.Colors.PINK,
+                                    title="Extracción de Texto: ",
+                                    subtitle="Convierte imágenes y PDFs en texto",
+                                    color_card=colors[0]
                                 ),
-                                ft.Row(
-                                    [
-                                        ft.Icon(name=ft.Icons.EMAIL, color=ft.Colors.PINK),
-                                        ft.Text("Envío de Correos: Envía correos con la información extraída de facturas o imágenes, adjuntando el archivo original.", size=15),
-                                    ],
-                                    alignment=ft.alignment.center,
-                                    wrap=True
+                                card_presentacion(
+                                    icon=ft.Icons.EMAIL,
+                                    color_icon=ft.Colors.PINK,
+                                    title="Envío de Correos: ",
+                                    subtitle="Envía correos con la información extraída de facturas o imágenes, adjuntando el archivo original.",
+                                    color_card=colors[1]
                                 ),
-                                ft.Row(
-                                    [
-                                        ft.Icon(name=ft.Icons.DATA_SAVER_ON, color=ft.Colors.PINK),
-                                        ft.Text("Guardado en Google Sheets: Almacena la información extraída directamente en Google Sheets para un fácil acceso y gestión.", size=15),
-                                    ],
-                                    alignment=ft.alignment.center,
-                                    wrap=True
+                                card_presentacion(
+                                    icon=ft.Icons.DATA_SAVER_ON,
+                                    color_icon=ft.Colors.PINK,
+                                    title="Guardado en Google Sheets: ",
+                                    subtitle="Almacena la información extraída directamente en Google Sheets para un fácil acceso y gestión.",
+                                    color_card=colors[2]
                                 ),
-                                ft.Row(
-                                    [
-                                        ft.Icon(name=ft.Icons.TRANSFORM, color=ft.Colors.PINK),
-                                        ft.Text("Extracción de Imágenes: Extrae imágenes de documentos PDF", size=15),
-                                    ],
-                                    alignment=ft.alignment.center,
-                                    wrap=True
+                                card_presentacion(
+                                    icon=ft.Icons.TRANSFORM,
+                                    color_icon=ft.Colors.PINK,
+                                    title="Extracción de Imágenes: ",
+                                    subtitle="Extrae imágenes de documentos PDF",
+                                    color_card=colors[0]
                                 ),
-                            ]
+                            ],
+                            wrap=True,
+                            alignment=ft.MainAxisAlignment.CENTER
                         ),
-                        
-                        
                     ],
                     spacing=20
-                    
                 ),
                 ft.Divider(),
 

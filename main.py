@@ -6,6 +6,9 @@ from pages.home import HomePage
 from pages.extraccion_page import ExtractPage
 from pages.extraccion_imagenes_pdf import ExtractImgPage
 from pages.tables_view import TablesPage
+from pages.calendario import CalendarPage
+
+
 
 from utils.openmenu import create_navigation_drawer,open_menu_lateral
 
@@ -27,6 +30,8 @@ def main(page: ft.Page):
             page.controls[1] = TablesPage(page)
         elif index == 3:
             page.controls[1] = ExtractImgPage(page)
+        elif index == 4:
+            page.controls[1] = CalendarPage(page)
         page.update()
 
     drawer = create_navigation_drawer(page, cambiar_pagina)
@@ -43,6 +48,7 @@ def main(page: ft.Page):
             ft.NavigationBarDestination(icon=ft.Icons.DOCUMENT_SCANNER,label="Lector IMG/PDF"),
             ft.NavigationBarDestination(icon=ft.Icons.TABLE_CHART,label="Tablas"),
             ft.NavigationBarDestination(icon=ft.Icons.TRANSFORM,label="Imagen a pdf"),
+            ft.NavigationBarDestination(icon=ft.Icons.CALENDAR_MONTH,label="Calendario"),
         ],
         on_change=lambda e: cambiar_pagina(e.control.selected_index),
         bgcolor=ft.Colors.BLACK12

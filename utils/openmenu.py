@@ -34,6 +34,11 @@ def create_navigation_drawer(page, cambiar_pagina):
                 label="Imagen a PDF",
                 selected_icon=ft.Icons.TRANSFORM,
             ),
+            ft.NavigationDrawerDestination(
+                icon=ft.Icon(ft.Icons.CALENDAR_MONTH),
+                label="Calendario",
+                selected_icon=ft.Icons.CALENDAR_MONTH,
+            ),
         ],
         bgcolor=ft.Colors.BLACK54
     )
