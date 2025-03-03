@@ -10,8 +10,6 @@ from assets.styles.styles import PADDING_TOP
 
 
 def card_presentacion(icon, color_icon, title, subtitle, color_card:None):
-
-
     return ft.Card(
         content=ft.Container(
             content=ft.Row(

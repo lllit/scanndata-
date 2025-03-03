@@ -70,8 +70,10 @@ class GoogleCalendarManager:
         }
 
         if attendees:
-            event["attendees"] = [{"email": email} for email in attendees]
-
+            valid_attendees = [email for email in attendees if email.strip()]
+            if valid_attendees:
+                event["attendees"] = [{"email": email} for email in valid_attendees]
+        
         try:
             event = self.service.events().insert(calendarId=ID_CALENDAR_SCANNDATA, body=event).execute()
             print(f"Event created: {event.get('htmlLink')}")
