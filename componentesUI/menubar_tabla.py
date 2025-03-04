@@ -1,6 +1,6 @@
 import flet as ft
 from utils.constantes import *
-
+from assets.styles.styles import colors
 
 
 
@@ -8,7 +8,7 @@ menubartabla = ft.MenuBar(
         expand=True,
         style=ft.MenuStyle(
             alignment=ft.alignment.top_left,
-            bgcolor=ft.Colors.BLACK12,
+            bgcolor=colors[0],
         ),
         controls=[
             ft.SubmenuButton(

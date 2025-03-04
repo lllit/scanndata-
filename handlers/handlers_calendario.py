@@ -106,13 +106,18 @@ def delete_event(event, page,CalendarPage):
 
 
 def agregar_evento(e, page,CalendarPage):
+    
+    page.scroll = ft.ScrollMode.AUTO
+
     # Definir los campos de texto
-    summary_field = ft.TextField(label="Título del Evento")
-    hora_inicio = ft.TextField(label="Hora de inicio")
-    hora_fin = ft.TextField(label="Hora de Fin")
-    fecha_inicio = ft.TextField(label="Fecha Inicio")
-    fecha_fin = ft.TextField(label="Fecha Fin")
+    summary_field = ft.TextField(label="Nombre del evento")
+    hora_inicio = ft.TextField(label="Hora de inicio", read_only=True)
+    hora_fin = ft.TextField(label="Hora de Fin", read_only=True)
+    fecha_inicio = ft.TextField(label="Fecha Inicio", read_only=True)
+    fecha_fin = ft.TextField(label="Fecha Fin", read_only=True)
     attendees_field = ft.TextField(label="Participantes (separados por comas)")
+
+
 
     def handle_change_fecha(e):
         print(e.control.value.strftime('%Y-%m-%d'))
@@ -213,12 +218,22 @@ def agregar_evento(e, page,CalendarPage):
         content=ft.Column(
             controls=[
                 summary_field,
+                ft.Divider(),
                 ft.Row(
                     controls=[
-                        fecha_inicio,
-                        hora_inicio,
-                        fecha_selector,
-                        btn_time
+                        ft.ResponsiveRow(
+                            controls=[
+                                fecha_inicio,
+                                fecha_selector,
+                            ],
+
+                        ),
+                        ft.ResponsiveRow(
+                            controls=[
+                                hora_inicio,
+                                btn_time
+                            ]
+                        ),
                     ],
                     wrap=True
                 ),
@@ -248,6 +263,7 @@ def agregar_evento(e, page,CalendarPage):
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         bgcolor=ft.Colors.with_opacity(0.95,colors[1]),
+        scrollable=True
     )
 
     page.open(dlg_modal)
@@ -289,6 +305,7 @@ def create_event_dialog(event, page,CalendarPage):
             content=ft.Column(
                 controls=[
                     ft.Text(f"Evento: {event['summary']}", size=20, weight=ft.FontWeight.BOLD),
+                    ft.Divider(),
                     ft.Text(f"Fecha: {fecha_inicio_split} hasta {fecha_fin_split}", size=16),
                     ft.Text(f"Hora: {fecha_inicio_hora} hasta {fecha_fin_hora}", size=16),
 
@@ -323,18 +340,13 @@ def create_event_dialog(event, page,CalendarPage):
             ),
             padding=20,
             alignment=ft.alignment.center,
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.top_left,
-                end=ft.alignment.bottom_right,
-                colors=colors
-            ),
             border_radius=ft.border_radius.all(10)
         ),
         actions=[
             ft.TextButton("Cerrar", on_click=lambda e: page.close(dlg_modal))
         ],
         actions_alignment=ft.MainAxisAlignment.END,
-        bgcolor=ft.Colors.with_opacity(0.6,colors[1]),
+        bgcolor=ft.Colors.with_opacity(0.8,colors[1]),
         
         
     )

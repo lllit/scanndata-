@@ -3,7 +3,7 @@ import flet as ft
 from assets.styles.styles import colors
 
 from assets.styles.styles import PADDING_TOP
-
+import math
 
 
 
@@ -32,11 +32,25 @@ def card_presentacion(icon, color_icon, title, subtitle, color_card:None):
                 alignment=ft.alignment.center,
                 wrap=True
             ),
-            padding=10
+            padding=10,
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.top_left,
+                colors=[
+                    colors[0],
+                    colors[1],
+                    colors[2],
+                ],
+                tile_mode=ft.GradientTileMode.MIRROR,
+                rotation=math.pi / 3,
+                end=ft.Alignment(0.8, 1),
+            ),
+            border_radius=ft.border_radius.all(10),
         ),
+        
         color=color_card,
         width=250,
         height=250,
+        
     )
 
 
@@ -86,7 +100,8 @@ def interfaze_informativo():
                                     color_icon=ft.Colors.PINK,
                                     title="Extracción de Imágenes: ",
                                     subtitle="Extrae imágenes de documentos PDF",
-                                    color_card=colors[0]
+                                    color_card=colors[0],
+                                    
                                 ),
                             ],
                             wrap=True,
@@ -96,8 +111,8 @@ def interfaze_informativo():
                     spacing=20
                 ),
                 ft.Divider(),
-
-            ]
+            ],
+            
         ),
         padding=ft.padding.only(left=30,right=30,top=10,bottom=10),
     )

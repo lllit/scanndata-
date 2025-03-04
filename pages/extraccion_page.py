@@ -127,7 +127,7 @@ def ExtractPage(page,cambiar_pagina):
                     controls=[
                         ft.IconButton(
                             icon=ft.Icons.ARROW_BACK,
-                            on_click=lambda e: cambiar_pagina(1)
+                            on_click=lambda e: cambiar_pagina(1, page)
                         )
                     ],
                     alignment=ft.MainAxisAlignment.START

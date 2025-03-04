@@ -53,7 +53,7 @@ def TablesPage(page):
             print("LOAD new_current_sheet_name ", new_current_sheet_name)
 
             gs.sheet = gs.sh.worksheet(new_current_sheet_name)
-
+ 
         except gspread.exceptions.WorksheetNotFound:
             print(f"Worksheet '{current_sheet_name}' not found.")
             return [], []
@@ -136,7 +136,8 @@ def TablesPage(page):
     sheet_menu_items = [
         ft.MenuItemButton(
             content=ft.Text(sheet),
-            on_click=on_sheet_selected
+            on_click=on_sheet_selected,
+        
         ) for sheet in all_sheets
     ]
 
@@ -156,7 +157,8 @@ def TablesPage(page):
         rows=initial_rows,
         horizontal_lines=ft.BorderSide(1,"gray"),
         vertical_lines=ft.BorderSide(1, "gray"),
-        
+        bgcolor=ft.Colors.with_opacity(0.4,colors[1]),
+        border_radius=ft.border_radius.all(10)
     )
     scrollable_table = ft.Row(
         controls=[table],
@@ -259,8 +261,6 @@ def TablesPage(page):
 
     ui_principal = ft.Column(
         controls=[
-            titulo,
-            
             scrollable_table,
             ft.Container(
                 content=ft.Row(

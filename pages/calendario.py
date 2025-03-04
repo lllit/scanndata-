@@ -21,7 +21,16 @@ calendar = GoogleCalendarManager()
 
 def vista_recordatorio_calendar(events, page):
     if not events:
-        return ft.Text("No hay registros aún", size=16, color=ft.Colors.RED)
+        return ft.Container(
+            ft.Row(
+                controls=[
+                    ft.Text("No hay registros aún", size=16, color=ft.Colors.RED),
+                    ft.Icon(name=ft.Icons.EMAIL_SHARP)
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+            )
+            
+        )
 
     tiles = []
 
@@ -38,8 +47,6 @@ def vista_recordatorio_calendar(events, page):
             else:
                 correos = ["No hay participantes asociados a este evento"]
         
-
-
             print(events)
 
             fecha_inicio_split = fecha_inicio.split('T')[0]
@@ -100,7 +107,7 @@ def vista_recordatorio_calendar(events, page):
     return ft.Container(
         content=ft.Column(
             controls=[*tiles], 
-            alignment=ft.MainAxisAlignment.START
+            alignment=ft.MainAxisAlignment.START,
         ), 
         expand=True,
         padding=0,
@@ -113,8 +120,8 @@ def vista_recordatorio_calendar(events, page):
 
 def CalendarPage(page):
 
-    titulo = ft.Text("Calendario",size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
-    
+    page.title = "Calendario"
+
     events = calendar.list_upcoming_events()
 
     rail = ft.NavigationRail(
@@ -123,10 +130,9 @@ def CalendarPage(page):
         leading=ft.FloatingActionButton(icon=ft.Icons.CREATE_NEW_FOLDER_OUTLINED, on_click=lambda e: agregar_evento(e, page,CalendarPage), tooltip="Agregar nuevo evento"),
         group_alignment=-0.9,
         destinations=[
-            ft.NavigationRailDestination(
+            ft.FloatingActionButton(
                 icon=ft.Icons.SETTINGS_OUTLINED,
-                selected_icon=ft.Icon(ft.Icons.SETTINGS),
-            ),
+            )
         ],
         on_change=lambda e: print("Selected destination:", e.control.selected_index),
         expand=True,
@@ -138,13 +144,6 @@ def CalendarPage(page):
             controls=[
                 ft.Column(
                     controls=[
-                        ft.Row(
-                            controls=[
-                                titulo,
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER
-                        ), 
-                        
                         vista_recordatorio_calendar(events,page)
                     ],
                     expand=True,

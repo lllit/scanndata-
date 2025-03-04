@@ -2,13 +2,10 @@ import flet as ft
 
 
 
-
-
-
 def create_navigation_drawer(page, cambiar_pagina):
     return ft.NavigationDrawer(
         on_dismiss=None,
-        on_change=lambda e: cambiar_pagina(e.control.selected_index),
+        on_change=lambda e: cambiar_pagina(e.control.selected_index,page),
         controls=[
             ft.Container(height=12, 
                         padding=ft.padding.only(top=30)
