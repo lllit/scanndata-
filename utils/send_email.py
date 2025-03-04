@@ -7,6 +7,8 @@ import os
 
 load_dotenv()
 
+
+
 def send_email(subject, body, to_email, attachment_path):
     remitente = os.getenv('EMAIL_USER')
     codigo = os.getenv('EMAIL_PASSWORD')

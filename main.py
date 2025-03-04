@@ -14,7 +14,15 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.scroll = ft.ScrollMode.AUTO
     
+    page.fonts = {
+        "Roboto": "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxP.ttf",
+        "RobotoBold": "https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf",
+        "RobotoItalic": "https://fonts.gstatic.com/s/roboto/v30/KFOkCnqEu92Fr1Mu51xIIzc.ttf"
+    }
 
+    page.theme = ft.Theme(
+        font_family="Roboto"
+    )
 
 
     drawer = create_navigation_drawer(page, cambiar_pagina)

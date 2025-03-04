@@ -59,7 +59,21 @@ def interfaze_informativo():
         content=ft.Column(
             controls=[
                 ft.Container(
-                    content=ft.Text("Bienvenido a ScannData!",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
+                    content=ft.Row(
+                        controls=[
+                            ft.Container(
+                                content=ft.Image(src="assets/icon.png"),
+                                width=25,
+                                height=25,
+                                scale=ft.transform.Scale(scale=1),
+                                animate_scale=ft.animation.Animation(1000, ft.AnimationCurve.EASE_IN_OUT_SINE),
+                            ),
+                            ft.Text("ScannData",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
+                            
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER
+                        
+                    ),
                     
                     alignment=ft.alignment.center
                 ),
@@ -123,34 +137,10 @@ def interfaze_informativo():
 
 def HomePage(page):
 
-
-
-    icon_container = ft.Container(
-        content=ft.Image(src="assets/icon.png"),
-        width=25,
-        height=25,
-        scale=ft.transform.Scale(scale=1),
-        animate_scale=ft.animation.Animation(1000, ft.AnimationCurve.EASE_IN_OUT_SINE)
-    )
-
-
-
-    
-
     def saludo_bienvenida():
         return ft.Column(
             controls=[
-                
-                ft.Row(
-                    controls=[
-                        icon_container,
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    vertical_alignment=ft.CrossAxisAlignment.CENTER
-                ),
                 interfaze_informativo(),
-                
-                
             ], 
             
         )

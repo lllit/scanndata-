@@ -8,26 +8,33 @@ from pages.send_email_page import SendEmailPage
 from utils.reconocimiento import extract_data_from_image, extract_text_from_pdf
 from utils.llm import llm_ordenar_texto, reformular_respuesta_send
 from utils.send_email import send_email
-from assets.styles.styles import PADDING_TOP
 from utils.google_sheets_actions import GoogleSheet
 from utils.dialog import opendialog
 
+from assets.styles.styles import PADDING_TOP
+
+from handlers.handlers_go_send_email import go_to_send_email_page
 
 # -------------------------------
 file_name_gs = "credencials/extdata-452119-f9321e8e1617.json"
 google_sheet = "BD_ExtData"
 sheet_name = "facturas_boletas"
 
-def generate_uid():
-    unique_id = uuid.uuid4()
-    unique_id_str = str(unique_id)
-    return unique_id_str
-
-
-
 
 
 # -------------------------------
+global text_area
+global rut_emisor
+global razon_social_emisor
+global folio_dte
+global fecha
+global monto
+global primer_item
+global btn_email_icon
+global btn_registrar_bd
+
+
+
 
 
 def ExtractPage(page,cambiar_pagina):
@@ -58,9 +65,9 @@ def ExtractPage(page,cambiar_pagina):
                 respuesta_llm = await llm_ordenar_texto(text)
                 
             try:
-                """
-                Ordenando la respuesta del llm en la UI
-                """
+                
+                #Ordenando la respuesta del llm en la UI
+                
                 text_area.value = await reformular_respuesta_send(respuesta_llm)
                 
                 data = json.loads(respuesta_llm)
@@ -85,11 +92,16 @@ def ExtractPage(page,cambiar_pagina):
 
             #email_checkbox.disabled = False
             page.update()
-    
+
+    file_picker = ft.FilePicker(on_result=on_file_upload)
+
+
+    page.overlay.append(file_picker)
 
     def on_send_email(e):
         send_email(subject_field.value, text_area.value, recipient_field.value,page.selected_file_path)
         page.open(opendialog(page,"Correo enviado!","El correo ha sido enviado exitosamente!"))
+
 
     def registrar_bd(e):
 
@@ -113,37 +125,9 @@ def ExtractPage(page,cambiar_pagina):
         range = google.get_last_row_range()
         google.write_data(range,value)
         page.open(opendialog(page,"Registro exitoso!", "Los datos han sido registrados en Google Sheets."))
-
-
+   
 
     
-
-
-    def go_to_send_email_page(e):
-        # Mantener la barra de navegación y solo actualizar el contenido principal
-        page.controls[1] = ft.Column(
-            controls=[
-                ft.Row(
-                    controls=[
-                        ft.IconButton(
-                            icon=ft.Icons.ARROW_BACK,
-                            on_click=lambda e: cambiar_pagina(1, page)
-                        )
-                    ],
-                    alignment=ft.MainAxisAlignment.START
-                ),
-                ft.Container(
-                    content=SendEmailPage(page),
-                    alignment=ft.alignment.center
-                ),
-                
-            ]
-        )
-        page.update()
-
-
-
-    file_picker = ft.FilePicker(on_result=on_file_upload)
 
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True, disabled=True)
     rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True)
@@ -152,7 +136,7 @@ def ExtractPage(page,cambiar_pagina):
                     icon_color="blue400",
                     icon_size=30,
                     tooltip="Enviar por Gmail",
-                    on_click=go_to_send_email_page,
+                    on_click=lambda e: go_to_send_email_page(e,page,cambiar_pagina),
                     disabled=True
                 )
 
@@ -174,11 +158,11 @@ def ExtractPage(page,cambiar_pagina):
                     icon_color=ft.Colors.GREEN_300,
                     icon_size=30,
                     tooltip="Registrar google sheets",
-                    on_click=registrar_bd,
+                    on_click=lambda e: registrar_bd(e,page),
                     disabled=True
                 )
 
-    page.overlay.append(file_picker)
+    
 
 
     ui_principal = ft.Column(
