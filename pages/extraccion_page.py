@@ -10,6 +10,7 @@ from utils.llm import llm_ordenar_texto, reformular_respuesta_send
 from utils.send_email import send_email
 from utils.google_sheets_actions import GoogleSheet
 from utils.dialog import opendialog
+from utils.generate_uid import generate_uid
 
 from assets.styles.styles import PADDING_TOP
 
