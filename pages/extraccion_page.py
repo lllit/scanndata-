@@ -3,7 +3,7 @@ import json
 import uuid
 from datetime import date
 
-from pages.send_email_page import SendEmailPage
+from assets.styles.styles import colors
 
 from utils.reconocimiento import extract_data_from_image, extract_text_from_pdf
 from utils.llm import llm_ordenar_texto, reformular_respuesta_send
@@ -128,10 +128,16 @@ def ExtractPage(page,cambiar_pagina):
         page.open(opendialog(page,"Registro exitoso!", "Los datos han sido registrados en Google Sheets."))
    
 
-    
+    rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+    razon_social_emisor = ft.TextField(label="Razon social Emisor", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+    folio_dte = ft.TextField(label="Folio DTE", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+    fecha = ft.TextField(label="Fecha", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+    monto = ft.TextField(label="Monto", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+    primer_item = ft.TextField(label="Primer Item", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
+
 
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True, disabled=True)
-    rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True)
+    
     btn_email_icon = ft.IconButton(
                     icon=ft.Icons.EMAIL,
                     icon_color="blue400",
@@ -141,16 +147,11 @@ def ExtractPage(page,cambiar_pagina):
                     disabled=True
                 )
 
-    razon_social_emisor = ft.TextField(label="Razon social Emisor", width=600, read_only=True)
-    folio_dte = ft.TextField(label="Folio DTE", width=600, read_only=True)
-    fecha = ft.TextField(label="Fecha", width=600, read_only=True)
-    monto = ft.TextField(label="Monto", width=600, read_only=True)
-    primer_item = ft.TextField(label="Primer Item", width=600, read_only=True)
+    
     
     
 
 
-    btn_send_gmail = ft.ElevatedButton("Enviar por Gmail", on_click=on_send_email, visible=False)
     subject_field = ft.TextField(label="Asunto", width=600, visible=False)
     recipient_field = ft.TextField(label="Destinatario", width=600, visible=False)
     
@@ -172,17 +173,25 @@ def ExtractPage(page,cambiar_pagina):
             titulo,
             texto_subid,
             ft.ElevatedButton("Seleccionar archivo", on_click=lambda _: file_picker.pick_files()),
+            ft.Container(
+                content=ft.Column(
+                    controls=[
+                        rut_emisor,
+                        razon_social_emisor,
+                        folio_dte,
+                        fecha,
+                        monto,
+                        primer_item,
+                    ],
+                    
+                ),
+                bgcolor=ft.Colors.with_opacity(0.3,colors[1]),
+                padding=ft.padding.only(top=10,bottom=10,left=39,right=39),
+                border_radius=ft.border_radius.all(10),
+                
+            ),
             
-            rut_emisor,
-            razon_social_emisor,
-            folio_dte,
-            fecha,
-            monto,
-            primer_item,
 
-            subject_field,
-            recipient_field,
-            btn_send_gmail,
             
             ft.Container(
                 content=ft.Row(
