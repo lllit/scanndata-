@@ -16,6 +16,7 @@ from assets.styles.styles import PADDING_TOP
 
 from handlers.handlers_go_send_email import go_to_send_email_page
 
+from componentesUI.extraccionUI import railExtraccionPage
 # -------------------------------
 file_name_gs = "credencials/extdata-452119-f9321e8e1617.json"
 google_sheet = "BD_ExtData"
@@ -37,9 +38,18 @@ global btn_registrar_bd
 
 
 
+def read_formulario_extract(label):
+    return ft.TextField(
+        label=label,
+        width=600,
+        read_only=True,
+        border=ft.InputBorder.UNDERLINE
+    )
+   
+
 
 def ExtractPage(page,cambiar_pagina):
-    titulo = ft.Text("Lector IMG/PDF", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
+    titulo = ft.Text("Lector Facturas/Boletas", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
     texto_subid = ft.Text("Sube una imagen o un PDF:")
 
 
@@ -48,7 +58,7 @@ def ExtractPage(page,cambiar_pagina):
 
     page.email_content = ""
 
-
+    
 
 
     async def on_file_upload(e):
@@ -99,9 +109,6 @@ def ExtractPage(page,cambiar_pagina):
 
     page.overlay.append(file_picker)
 
-    def on_send_email(e):
-        send_email(subject_field.value, text_area.value, recipient_field.value,page.selected_file_path)
-        page.open(opendialog(page,"Correo enviado!","El correo ha sido enviado exitosamente!"))
 
 
     def registrar_bd(e):
@@ -128,13 +135,12 @@ def ExtractPage(page,cambiar_pagina):
         page.open(opendialog(page,"Registro exitoso!", "Los datos han sido registrados en Google Sheets."))
    
 
-    rut_emisor = ft.TextField(label="Rut Emisor", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-    razon_social_emisor = ft.TextField(label="Razon social Emisor", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-    folio_dte = ft.TextField(label="Folio DTE", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-    fecha = ft.TextField(label="Fecha", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-    monto = ft.TextField(label="Monto", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-    primer_item = ft.TextField(label="Primer Item", width=600, read_only=True,border=ft.InputBorder.UNDERLINE,)
-
+    rut_emisor = read_formulario_extract(label="Rut Emisor")
+    razon_social_emisor = read_formulario_extract(label="Razon social Emisor")
+    folio_dte = read_formulario_extract(label="Folio DTE")
+    fecha = read_formulario_extract(label="Fecha")
+    monto = read_formulario_extract(label="Monto")
+    primer_item = read_formulario_extract(label="Primer Item")
 
     text_area = ft.TextField(value="", multiline=True, width=600, height=400, read_only=True, disabled=True)
     
@@ -147,14 +153,6 @@ def ExtractPage(page,cambiar_pagina):
                     disabled=True
                 )
 
-    
-    
-    
-
-
-    subject_field = ft.TextField(label="Asunto", width=600, visible=False)
-    recipient_field = ft.TextField(label="Destinatario", width=600, visible=False)
-    
     btn_registrar_bd = ft.IconButton(
                     icon=ft.Icons.DATA_SAVER_ON,
                     icon_color=ft.Colors.GREEN_300,
@@ -169,52 +167,89 @@ def ExtractPage(page,cambiar_pagina):
 
     ui_principal = ft.Column(
         controls=[
-            
             titulo,
-            texto_subid,
-            ft.ElevatedButton("Seleccionar archivo", on_click=lambda _: file_picker.pick_files()),
-            ft.Container(
-                content=ft.Column(
-                    controls=[
-                        rut_emisor,
-                        razon_social_emisor,
-                        folio_dte,
-                        fecha,
-                        monto,
-                        primer_item,
-                    ],
-                    
-                ),
-                bgcolor=ft.Colors.with_opacity(0.3,colors[1]),
-                padding=ft.padding.only(top=10,bottom=10,left=39,right=39),
-                border_radius=ft.border_radius.all(10),
-                
+            ft.Row(
+                controls=[
+                    texto_subid,
+                    ft.IconButton(
+                        icon=ft.Icons.UPLOAD_FILE,
+                        tooltip="Seleccionar archivo", 
+                        on_click=lambda _: file_picker.pick_files()
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
             ),
-            
-
-            
-            ft.Container(
-                content=ft.Row(
-                    controls=[btn_email_icon,btn_registrar_bd,],
-                    alignment=ft.MainAxisAlignment.END,
-                ),
-                padding=ft.padding.only(right=20)
+           
+            ft.Row(
+                controls=[
+                    ft.Container(
+                        content=ft.Column(
+                            controls=[
+                                rut_emisor,
+                                razon_social_emisor,
+                                folio_dte,
+                                fecha,
+                                monto,
+                                primer_item,
+                                ft.Row(
+                                    controls=[
+                                        btn_email_icon,
+                                        btn_registrar_bd
+                                    ],
+                                    alignment=ft.MainAxisAlignment.CENTER
+                                ),    
+                            ],
+                            expand=True,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                        ),
+                        gradient=ft.RadialGradient(
+                            center=ft.Alignment(0,-1.25),
+                            radius=1.4,
+                            colors=[
+                                "#424454",
+                                "#393b52",
+                                "#33354a",
+                                "#2f3143",
+                                "#292b3c",
+                                "#222331",
+                                "#1a1a25",
+                                "#1a1b26",
+                                "#21222f",
+                                "#1d1e2a"
+                            ],
+                        ),
+                        padding=ft.padding.only(top=10,bottom=10,left=39,right=39),
+                        border_radius=ft.border_radius.all(10),
+                        expand=True,
+                    )
+                ],
+                vertical_alignment=ft.CrossAxisAlignment.END,
+                expand=True,
             ),
-            
             
         ],
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        expand=True
     )
 
+    
 
     return ft.Container(
-        content=ft.Column(
-                controls=[
-                    ui_principal
-                ]
-            ),
-        padding=ft.padding.only(top=PADDING_TOP)
-
+        content=ft.Row(
+            controls=[
+                ft.Container(content=railExtraccionPage(page)),
+                ft.Column(
+                    controls=[
+                        ui_principal
+                    ],
+                    expand=True
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+        ),
+        padding=ft.padding.only(top=PADDING_TOP),
+        alignment=ft.alignment.center,
+        expand=True
     )
 
    

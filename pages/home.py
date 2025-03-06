@@ -9,7 +9,7 @@ import math
 
 
 
-def card_presentacion(icon, color_icon, title, subtitle, color_card:None):
+def card_presentacion(icon,title, subtitle, color_card:None):
     return ft.Card(
         content=ft.Container(
             content=ft.Row(
@@ -18,36 +18,59 @@ def card_presentacion(icon, color_icon, title, subtitle, color_card:None):
                         controls=[
                             ft.Row(
                                 controls=[
-                                    ft.Icon(name=icon, color=color_icon),
+                                    ft.Container(
+                                        content=ft.Icon(name=icon, color=ft.Colors.WHITE),
+                                        gradient=ft.RadialGradient(
+                                            center=ft.Alignment(0,-1.25),
+                                            radius=1.4,
+                                            colors=[
+                                                "#424454",
+                                                "#393b52",
+                                                "#33354a",
+                                                "#2f3143",
+                                                "#292b3c",
+                                                "#222331",
+                                                "#1a1a25",
+                                                "#1a1b26",
+                                                "#21222f",
+                                                "#1d1e2a"
+                                            ],
+                                        ),
+                                        padding=ft.padding.all(10),
+                                        border_radius=ft.border_radius.all(10)
+                                    ),
+                                    ft.Text(title, size=15, weight=ft.FontWeight.W_600),
+                                    
                                 ],
-                                alignment=ft.MainAxisAlignment.CENTER,
+                                alignment=ft.MainAxisAlignment.START,
                             ),
-                            ft.Text(title, size=15, weight=ft.FontWeight.W_600),
+                            
                         ]
                     ),
-                    
-                    ft.Text(subtitle, size=10),
-                    
+                    ft.Text(subtitle, size=13),
                 ],
                 alignment=ft.alignment.center,
                 wrap=True
             ),
             padding=10,
-            gradient=ft.LinearGradient(
-                begin=ft.alignment.top_left,
+            gradient=ft.RadialGradient(
+                center=ft.Alignment(0,-1.25),
+                radius=1.4,
                 colors=[
-                    colors[0],
-                    colors[1],
-                    colors[2],
+                    "#424454",
+                    "#393b52",
+                    "#33354a",
+                    "#2f3143",
+                    "#292b3c",
+                    "#222331",
+                    "#1a1a25",
+                    "#1a1b26",
+                    "#21222f",
+                    "#1d1e2a"
                 ],
-                tile_mode=ft.GradientTileMode.MIRROR,
-                rotation=math.pi / 3,
-                end=ft.Alignment(0.8, 1),
             ),
             border_radius=ft.border_radius.all(10),
         ),
-        
-        color=color_card,
         width=250,
         height=250,
         
@@ -90,28 +113,24 @@ def interfaze_informativo():
                             controls=[
                                 card_presentacion(
                                     icon=ft.Icons.DOCUMENT_SCANNER,
-                                    color_icon=ft.Colors.PINK,
                                     title="Extracción de Texto: ",
                                     subtitle="Convierte imágenes y PDFs en texto",
                                     color_card=colors[0]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.EMAIL,
-                                    color_icon=ft.Colors.PINK,
                                     title="Envío de Correos: ",
                                     subtitle="Envía correos con la información extraída de facturas o imágenes, adjuntando el archivo original.",
                                     color_card=colors[1]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.DATA_SAVER_ON,
-                                    color_icon=ft.Colors.PINK,
-                                    title="Guardado en Google Sheets: ",
+                                    title="Envio a Sheets ",
                                     subtitle="Almacena la información extraída directamente en Google Sheets para un fácil acceso y gestión.",
                                     color_card=colors[2]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.TRANSFORM,
-                                    color_icon=ft.Colors.PINK,
                                     title="Extracción de Imágenes: ",
                                     subtitle="Extrae imágenes de documentos PDF",
                                     color_card=colors[0],
