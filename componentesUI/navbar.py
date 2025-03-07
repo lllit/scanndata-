@@ -9,6 +9,7 @@ def nav_bar(page):
         destinations=[
             ft.NavigationBarDestination(icon=ft.Icons.HOME,label="Home"),
             ft.NavigationBarDestination(icon=ft.Icons.DOCUMENT_SCANNER,label="Extracción"),
+            ft.NavigationBarDestination(icon=ft.Icons.INVENTORY,label="Inventario"),
             ft.NavigationBarDestination(icon=ft.Icons.TABLE_CHART,label="Tablas"),
             ft.NavigationBarDestination(icon=ft.Icons.CALENDAR_MONTH,label="Calendario"),
         ],

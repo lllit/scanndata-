@@ -17,7 +17,7 @@ class GoogleSheet:
         """
         data = self.sheet.get_all_records()
         df = pd.DataFrame(data)
-        print(df)
+        #print(df)
         filtered_data = df[df['uid'] == uid]
         return filtered_data 
     

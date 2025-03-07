@@ -6,7 +6,7 @@ import os
 
 file_name_gs = os.environ.get("CREDENCIAL_SHEET")
 
-google_sheet = ["BD_ExtData","BD_ExtData2"]
+google_sheet = ["BDExtDataFacturaBoleta","BDExtDataInventario"]
 
 
 def generate_uid():

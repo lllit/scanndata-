@@ -4,7 +4,7 @@ from assets.styles.styles import colors
 
 from assets.styles.styles import PADDING_TOP
 
-from componentesUI.card_presentacion import card_presentacion
+from componentesUI.card_presentacion import card_presentacion, card_presentacion_adaptable
 
 
 
@@ -22,7 +22,7 @@ def interfaze_informativo():
                                 scale=ft.transform.Scale(scale=1),
                                 animate_scale=ft.animation.Animation(1000, ft.AnimationCurve.EASE_IN_OUT_SINE),
                             ),
-                            ft.Text("ScannData",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700),
+                            ft.Text("ScannData",size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_400),
                             
                         ],
                         alignment=ft.MainAxisAlignment.CENTER
@@ -31,10 +31,22 @@ def interfaze_informativo():
                     
                     alignment=ft.alignment.center
                 ),
-                ft.Text(
-                    value="ScannData es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.",
-                    size=17,
-                    weight=ft.FontWeight.W_400
+                ft.Container(
+                    content=ft.Column(
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        expand=True,
+                        controls=[
+                            card_presentacion_adaptable(
+                                icon=ft.Icons.HOME_FILLED,
+                                title="ScannData",
+                                subtitle="Es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.",
+                                width=400,
+                                height=200
+                            )
+                            
+                        ]
+                    )
                 ),
                 ft.Divider(),
                 ft.ListView(
@@ -85,6 +97,8 @@ def HomePage(page):
     
     def saludo_bienvenida():
         return ft.Column(
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 interfaze_informativo(),
             ], 
@@ -95,6 +109,8 @@ def HomePage(page):
     return ft.Container(
         padding=ft.padding.only(top=PADDING_TOP),
         content=ft.Column(
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                     saludo_bienvenida(),
                 ]

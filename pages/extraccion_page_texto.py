@@ -60,7 +60,7 @@ def ExtractPageText(page, cambiar_pagina_extraccion):
                     icon_color=ft.Colors.GREEN_300,
                     icon_size=30,
                     tooltip="Registrar google sheets",
-                    on_click=lambda e: registrar_bd(e,page),
+                    on_click=lambda e: registrar_bd(e),
                     disabled=True
                 )
 
