@@ -8,9 +8,8 @@ def nav_bar(page):
     nav_bar = ft.NavigationBar(
         destinations=[
             ft.NavigationBarDestination(icon=ft.Icons.HOME,label="Home"),
-            ft.NavigationBarDestination(icon=ft.Icons.DOCUMENT_SCANNER,label="Lector IMG/PDF"),
+            ft.NavigationBarDestination(icon=ft.Icons.DOCUMENT_SCANNER,label="Extracción"),
             ft.NavigationBarDestination(icon=ft.Icons.TABLE_CHART,label="Tablas"),
-            ft.NavigationBarDestination(icon=ft.Icons.TRANSFORM,label="Imagen a pdf"),
             ft.NavigationBarDestination(icon=ft.Icons.CALENDAR_MONTH,label="Calendario"),
         ],
         on_change=lambda e: cambiar_pagina(index=e.control.selected_index, page=page),

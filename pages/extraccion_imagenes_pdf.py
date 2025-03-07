@@ -1,5 +1,7 @@
 import flet as ft
 
+from componentesUI.railExtraccionUI import railExtraccionPage
+
 from utils.reconocimiento import extract_imagenes_pdf
 from utils.dialog import opendialog
 from assets.styles.styles import PADDING_TOP
@@ -57,20 +59,36 @@ def ExtractImgPage(page):
 
     def ui_extraccion_img_pdf():
         return ft.Column(
+            expand=True,
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 titulo,
                 ft.ElevatedButton("Seleccionar archivo PDF", on_click=lambda _: file_picker.pick_files()),
                 text_area,
                 save_btn
             ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            
     )
 
     return ft.Container(
-        content=ft.Column(
+        padding=ft.padding.only(top=PADDING_TOP),
+        expand=True,
+        content=ft.Row(
+            alignment=ft.MainAxisAlignment.START,
+            vertical_alignment=ft.CrossAxisAlignment.START,
             controls=[
-                ui_extraccion_img_pdf()
-            ],
-        ),
-        padding=ft.padding.only(top=PADDING_TOP)
+                ft.Container(
+                    expand=False,
+                    content=railExtraccionPage(page=page)
+                ),
+                ft.VerticalDivider(width=1),
+                ft.Container(
+                    expand=True,
+                    alignment=ft.alignment.top_center,
+                    content=ui_extraccion_img_pdf()
+                ),
+                
+            ]
+        )
     )

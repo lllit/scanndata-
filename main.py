@@ -26,10 +26,10 @@ def main(page: ft.Page):
     )
 
 
-    drawer = create_navigation_drawer(page, cambiar_pagina)
+    #drawer = create_navigation_drawer(page, cambiar_pagina)
     
 
-    page.appbar = appbar_principal(page=page,drawer=drawer)
+    # page.appbar = appbar_principal(page=page,drawer=drawer)
 
 
     # Configurar UI

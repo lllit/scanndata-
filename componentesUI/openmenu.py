@@ -18,18 +18,13 @@ def create_navigation_drawer(page, cambiar_pagina):
             ft.Divider(thickness=2),
             ft.NavigationDrawerDestination(
                 icon=ft.Icon(ft.Icons.DOCUMENT_SCANNER_OUTLINED),
-                label="Lector IMG/PDF",
+                label="Extracción",
                 selected_icon=ft.Icons.DOCUMENT_SCANNER,
             ),
             ft.NavigationDrawerDestination(
                 icon=ft.Icon(ft.Icons.TABLE_CHART_OUTLINED),
                 label="Tablas",
                 selected_icon=ft.Icons.TABLE_CHART,
-            ),
-            ft.NavigationDrawerDestination(
-                icon=ft.Icon(ft.Icons.TRANSFORM_OUTLINED),
-                label="Imagen a PDF",
-                selected_icon=ft.Icons.TRANSFORM,
             ),
             ft.NavigationDrawerDestination(
                 icon=ft.Icon(ft.Icons.CALENDAR_MONTH),

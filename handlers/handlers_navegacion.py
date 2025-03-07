@@ -5,6 +5,8 @@ from pages.tables_view import TablesPage
 from pages.calendario import CalendarPage
 
 
+
+
 def cambiar_pagina(index, page):
     if index == 0:
         page.controls[1] = HomePage(page)
@@ -13,7 +15,7 @@ def cambiar_pagina(index, page):
     elif index == 2:
         page.controls[1] = TablesPage(page)
     elif index == 3:
-        page.controls[1] = ExtractImgPage(page)
-    elif index == 4:
         page.controls[1] = CalendarPage(page)
     page.update()
+
+

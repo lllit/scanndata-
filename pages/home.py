@@ -3,78 +3,9 @@ import flet as ft
 from assets.styles.styles import colors
 
 from assets.styles.styles import PADDING_TOP
-import math
 
+from componentesUI.card_presentacion import card_presentacion
 
-
-
-
-def card_presentacion(icon,title, subtitle, color_card:None):
-    return ft.Card(
-        content=ft.Container(
-            content=ft.Row(
-                [
-                    ft.Column(
-                        controls=[
-                            ft.Row(
-                                controls=[
-                                    ft.Container(
-                                        content=ft.Icon(name=icon, color=ft.Colors.WHITE),
-                                        gradient=ft.RadialGradient(
-                                            center=ft.Alignment(0,-1.25),
-                                            radius=1.4,
-                                            colors=[
-                                                "#424454",
-                                                "#393b52",
-                                                "#33354a",
-                                                "#2f3143",
-                                                "#292b3c",
-                                                "#222331",
-                                                "#1a1a25",
-                                                "#1a1b26",
-                                                "#21222f",
-                                                "#1d1e2a"
-                                            ],
-                                        ),
-                                        padding=ft.padding.all(10),
-                                        border_radius=ft.border_radius.all(10)
-                                    ),
-                                    ft.Text(title, size=15, weight=ft.FontWeight.W_600),
-                                    
-                                ],
-                                alignment=ft.MainAxisAlignment.START,
-                            ),
-                            
-                        ]
-                    ),
-                    ft.Text(subtitle, size=13),
-                ],
-                alignment=ft.alignment.center,
-                wrap=True
-            ),
-            padding=10,
-            gradient=ft.RadialGradient(
-                center=ft.Alignment(0,-1.25),
-                radius=1.4,
-                colors=[
-                    "#424454",
-                    "#393b52",
-                    "#33354a",
-                    "#2f3143",
-                    "#292b3c",
-                    "#222331",
-                    "#1a1a25",
-                    "#1a1b26",
-                    "#21222f",
-                    "#1d1e2a"
-                ],
-            ),
-            border_radius=ft.border_radius.all(10),
-        ),
-        width=250,
-        height=250,
-        
-    )
 
 
 def interfaze_informativo():
@@ -115,25 +46,21 @@ def interfaze_informativo():
                                     icon=ft.Icons.DOCUMENT_SCANNER,
                                     title="Extracción de Texto: ",
                                     subtitle="Convierte imágenes y PDFs en texto",
-                                    color_card=colors[0]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.EMAIL,
                                     title="Envío de Correos: ",
                                     subtitle="Envía correos con la información extraída de facturas o imágenes, adjuntando el archivo original.",
-                                    color_card=colors[1]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.DATA_SAVER_ON,
                                     title="Envio a Sheets ",
                                     subtitle="Almacena la información extraída directamente en Google Sheets para un fácil acceso y gestión.",
-                                    color_card=colors[2]
                                 ),
                                 card_presentacion(
                                     icon=ft.Icons.TRANSFORM,
                                     title="Extracción de Imágenes: ",
                                     subtitle="Extrae imágenes de documentos PDF",
-                                    color_card=colors[0],
                                     
                                 ),
                             ],
@@ -155,7 +82,7 @@ def interfaze_informativo():
 
 
 def HomePage(page):
-
+    
     def saludo_bienvenida():
         return ft.Column(
             controls=[
@@ -166,11 +93,10 @@ def HomePage(page):
 
     
     return ft.Container(
-        
+        padding=ft.padding.only(top=PADDING_TOP),
         content=ft.Column(
             controls=[
                     saludo_bienvenida(),
                 ]
             ),
-            padding=ft.padding.only(top=PADDING_TOP)
         )

@@ -2,7 +2,7 @@ import flet as ft
 
 from pages.send_email_page import SendEmailPage
 
-def go_to_send_email_page(e, page,cambiar_pagina):
+def go_to_send_email_page(e, page,cambiar_pagina_extraccion):
     # Mantener la barra de navegación y solo actualizar el contenido principal
     page.controls[1] = ft.Column(
         controls=[
@@ -10,7 +10,7 @@ def go_to_send_email_page(e, page,cambiar_pagina):
                 controls=[
                     ft.IconButton(
                         icon=ft.Icons.ARROW_BACK,
-                        on_click=lambda e: cambiar_pagina(1, page)
+                        on_click=lambda e: cambiar_pagina_extraccion(0, page)
                     )
                 ],
                 alignment=ft.MainAxisAlignment.START

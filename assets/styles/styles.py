@@ -1,7 +1,7 @@
 import flet as ft
 
 
-PADDING_TOP = 1
+PADDING_TOP = 30
 
 
 
