@@ -5,7 +5,6 @@ from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
 from utils.constantes import file_name_gs, google_sheet
 from utils.exportacion import PDF
 
-from assets.styles.styles import GRADIENT
 import pandas as pd
 
 
@@ -212,29 +211,10 @@ def InventarioPage(page):
                 page.update()
 
     
-    def save_pdf(path):
-        pdf = PDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=12)
-
-        column_widths = [40, 40, 40]
-        header = ["Producto", "Precio", "Stock"]
-        for i, col_name in enumerate(header):
-            pdf.cell(column_widths[i], 10, col_name, 1, 0, "C")
-        pdf.ln()
-        data_ = data.get_all_values()
-        for row in data_:
-            pdf.cell(column_widths[0], 10, row["Producto"], 1)
-            pdf.cell(column_widths[1], 10, str(row["Precio"]), 1)
-            pdf.cell(column_widths[2], 10, str(row["Stock"]), 1)
-            pdf.ln()
-
-        # Save the PDF
-        pdf.output(path)
-
 
     #------------------------------------------
-
+    # Handlers Exportacion
+    #------------------------------------------
     def on_save_location_selected_pdf(e):
         from datetime import datetime
         if e.path:
@@ -242,7 +222,26 @@ def InventarioPage(page):
             print(folder_path)
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             file_path = f"{folder_path}/db_inventario_{now}.pdf"
-            save_pdf(path=file_path)
+            #ave_pdf(path=file_path)
+
+            pdf = PDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=12)
+
+            column_widths = [40, 40, 40]
+            header = ["Producto", "Precio", "Stock"]
+            for i, col_name in enumerate(header):
+                pdf.cell(column_widths[i], 10, col_name, 1, 0, "C")
+            pdf.ln()
+            data_ = data.get_all_values()
+            for row in data_:
+                pdf.cell(column_widths[0], 10, row["Producto"], 1)
+                pdf.cell(column_widths[1], 10, str(row["Precio"]), 1)
+                pdf.cell(column_widths[2], 10, str(row["Stock"]), 1)
+                pdf.ln()
+
+            # Save the PDF
+            pdf.output(file_path)
 
             
 
@@ -253,7 +252,7 @@ def InventarioPage(page):
         from datetime import datetime
         if e.path:
             folder_path = e.path
-            print(folder_path)
+            #print(folder_path)
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             file_path = f"{folder_path}/db_inventario_{now}.xlsx"
 
@@ -275,7 +274,8 @@ def InventarioPage(page):
     def on_export_click_excel(e):
         file_picker_excel.get_directory_path()
     #------------------------------------------
-    
+    #------------------------------------------
+
     form = ft.Container(
         bgcolor=colors[0],
         col=4,
