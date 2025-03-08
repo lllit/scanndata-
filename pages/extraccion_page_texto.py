@@ -33,7 +33,7 @@ def read_formulario_extract(label):
 
 def ExtractPageText(page, cambiar_pagina_extraccion):
 
-    titulo = ft.Text("Lector Facturas/Boletas", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
+    titulo = ft.Text("Lector Facturas/Boletas", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.GREEN_700)
 
     texto_subid = ft.Text("Sube una imagen o un PDF:")
 

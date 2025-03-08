@@ -8,7 +8,7 @@ from assets.styles.styles import PADDING_TOP
 
 
 def ExtractImgPage(page):
-    titulo = ft.Text("Extraccion de imagenes en PDF", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
+    titulo = ft.Text("Extraccion de imagenes en PDF", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_800)
     text_area = ft.TextField(value="", multiline=True, read_only=True, border=None, border_width=0)
 
 

@@ -5,6 +5,8 @@ from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
 from utils.constantes import file_name_gs, google_sheet
 from utils.exportacion import PDF
 
+from assets.styles.styles import GRADIENT
+import pandas as pd
 
 
 # MAIN DE PAGINA
@@ -14,6 +16,8 @@ def InventarioPage(page):
 
     global selected_row
     selected_row = None
+
+
     current_google_sheet = google_sheet[1]
 
     gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
@@ -176,7 +180,7 @@ def InventarioPage(page):
             if row['Producto'] == producto_name:
                 selected_row = row
                 break
-        print(selected_row)
+        #print(selected_row)
         page.update()
 
     def edit_filed_text(e):
@@ -184,6 +188,7 @@ def InventarioPage(page):
             producto.value = selected_row['Producto']
             precio.value = selected_row['Precio']
             stock.value = selected_row['Stock']
+
             page.update()
 
         except Exception as e:
@@ -228,7 +233,9 @@ def InventarioPage(page):
         pdf.output(path)
 
 
-    def on_save_location_selected(e):
+    #------------------------------------------
+
+    def on_save_location_selected_pdf(e):
         from datetime import datetime
         if e.path:
             folder_path = e.path
@@ -236,19 +243,60 @@ def InventarioPage(page):
             now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             file_path = f"{folder_path}/db_inventario_{now}.pdf"
             save_pdf(path=file_path)
+
+            
+
+            print("Guardado exitosamente")
+            page.update()
+    
+    def on_save_location_selected_excel(e):
+        from datetime import datetime
+        if e.path:
+            folder_path = e.path
+            print(folder_path)
+            now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            file_path = f"{folder_path}/db_inventario_{now}.xlsx"
+
+            data_ = data.get_all_values()
+
+            df = pd.DataFrame(data_, columns=["Producto", "Precio", "Stock"])
+            df.to_excel(file_path, index=False)
+
+            
+
             print("Guardado exitosamente")
             page.update()
 
-    def on_export_click(e):
-        file_picker.get_directory_path()
 
+    
+    def on_export_click_pdf(e):
+        file_picker_pdf.get_directory_path()
+        
+    def on_export_click_excel(e):
+        file_picker_excel.get_directory_path()
+    #------------------------------------------
     
     form = ft.Container(
         bgcolor=colors[0],
-        border_radius=ft.border_radius.all(10),
         col=4,
         padding=ft.padding.all(10),
         expand=True,
+        gradient=ft.RadialGradient(
+            center=ft.Alignment(0,-1.25),
+            radius=1.4,
+            colors=[
+                "#424454",
+                "#393b52",
+                "#33354a",
+                "#2f3143",
+                "#292b3c",
+                "#222331",
+                "#1a1a25",
+                "#1a1b26",
+                "#21222f",
+                "#1d1e2a"
+            ],
+        ),
         content=ft.Column(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -291,8 +339,23 @@ def InventarioPage(page):
 
 
     table = ft.Container(
-        bgcolor=colors[1],
-        border_radius=10,
+        border_radius=ft.border_radius.only(bottom_left=10,bottom_right=10),
+        gradient=ft.RadialGradient(
+            center=ft.Alignment(0,-1.25),
+            radius=1.4,
+            colors=[
+                "#424454",
+                "#393b52",
+                "#33354a",
+                "#2f3143",
+                "#292b3c",
+                "#222331",
+                "#1a1a25",
+                "#1a1b26",
+                "#21222f",
+                "#1d1e2a"
+            ],
+        ),
         col=8,
         expand=True,
         content=ft.Column(
@@ -314,12 +377,13 @@ def InventarioPage(page):
                                 icon=ft.Icons.PICTURE_AS_PDF,
                                 tooltip="Descargar en PDF",
                                 icon_color="white",
-                                on_click=on_export_click
+                                on_click=on_export_click_pdf
                             ),
                             ft.IconButton(
                                 icon=ft.Icons.SAVE_ALT,
                                 tooltip="Descargar en EXCEL",
-                                icon_color="white"
+                                icon_color="white",
+                                on_click=on_export_click_excel
                             ),
                         ]
                     )
@@ -357,9 +421,10 @@ def InventarioPage(page):
     
     
     
-    
-    file_picker = ft.FilePicker(on_result=on_save_location_selected)
-    page.overlay.append(file_picker)
+    file_picker_pdf = ft.FilePicker(on_result=on_save_location_selected_pdf)
+    file_picker_excel = ft.FilePicker(on_result=on_save_location_selected_excel)
+    page.overlay.append(file_picker_pdf)
+    page.overlay.append(file_picker_excel)
     
     show_data()
 

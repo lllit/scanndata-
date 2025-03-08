@@ -20,7 +20,7 @@ def TablesPage(page):
 
     
 
-    titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_700)
+    titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_700)
 
     current_google_sheet = google_sheet[0]
 
