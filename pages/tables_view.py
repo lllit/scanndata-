@@ -9,6 +9,7 @@ from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
 from utils.exportacion import export_data_to_csv,export_data_to_pdf
 from utils.dialog import opendialog
 
+from componentesUI.loadingUI import activity_indicator
 
 from componentesUI.menubar_tabla import menubartabla
 
@@ -18,11 +19,9 @@ URL_EXPORT = "files_export/"
 
 def TablesPage(page):
 
-    from componentesUI.loadingUI import activity_indicator
     page.controls.append(activity_indicator)
     page.update()
-
-    titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_700)
+    
 
     current_google_sheet = google_sheet[0]
 
@@ -40,27 +39,30 @@ def TablesPage(page):
     # --------------------------------------------
 
     def load_data(google_sheet, new_current_sheet_name):
-        print("LOAD DATA "+google_sheet)
+        #print("LOAD DATA "+google_sheet)
+        
 
         try:
             
             gs_general = GoogleSheetGeneral(file_name_gs, google_sheet)
             all_sheets = gs_general.get_all_sheets()
-            print("all_sheets "+all_sheets[0])
-            current_sheet_name = all_sheets[0]
+            #print("all_sheets "+all_sheets[0])
             
             
-            #current_sheet_name = new_current_sheet_name
-            print("LOAD current_sheet_name ", current_sheet_name)
-            print("LOAD new_current_sheet_name ", new_current_sheet_name)
+            #print("LOAD current_sheet_name ", current_sheet_name)
+            #print("LOAD new_current_sheet_name ", new_current_sheet_name)
 
             gs.sheet = gs.sh.worksheet(new_current_sheet_name)
  
         except gspread.exceptions.WorksheetNotFound:
-            print(f"Worksheet '{current_sheet_name}' not found.")
+            #print(f"Worksheet '{current_sheet_name}' not found.")
             return [], []
-
+        
+        
         data = gs.get_all_values()
+
+        
+
         if not data:
             return [], []
         
@@ -71,6 +73,9 @@ def TablesPage(page):
                 cells=[ft.DataCell(ft.Text(str(value))) for value in row.values()]
             ) for row in data
         ]
+
+        
+
         return columns, rows
 
         
@@ -81,7 +86,15 @@ def TablesPage(page):
 
         if not columns:
             columns = [ft.DataColumn(ft.Text("Sin información"))]
-            rows = [ft.DataRow(cells=[ft.DataCell(ft.Text(f"No hay data en la hoja: {current_sheet_name}"))])]
+            rows = [
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(
+                            ft.Text(f"No hay data en la hoja: {current_sheet_name}")
+                        )
+                    ]
+                )
+            ]
 
         table.columns = columns
         table.rows = rows

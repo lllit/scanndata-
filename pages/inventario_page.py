@@ -6,8 +6,8 @@ from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
 from utils.constantes import file_name_gs, google_sheet
 from utils.exportacion import PDF
 from utils.dialog import opendialog, show_delete_confirmation_dialog
-
-from utils.inventario_utils import show_data
+from handlers.handlers_inventario import on_export_click_pdf,on_export_click_excel,on_save_location_selected_excel,on_save_location_selected_pdf
+from utils.inventario_utils import get_index,edit_filed_text,show_data,update_data,clean_fileds,add_data, on_delete_click,search_data
 import pandas as pd
 
 
@@ -44,9 +44,6 @@ def InventarioPage(page):
     data = GoogleSheet(file_name_gs, current_google_sheet, current_sheet_name)
     #print(data.get_all_values())
 
-    
-
-
 
     producto = ft.TextField(
         label="Nombre",
@@ -67,35 +64,6 @@ def InventarioPage(page):
         max_length=4
     )
 
-    def search_data(e):
-        search = search_filed.value.lower()
-        producto_name = list(filter(lambda x: search in x['Producto'].lower(), data.get_all_values()))
-
-        datatable.rows = []
-        if search_filed.value !="":
-            if len(producto_name) >0:
-                for x in producto_name:
-                    datatable.rows.append(
-                        ft.DataRow(
-                            on_select_changed=get_index,
-                            cells=[
-                                ft.DataCell(
-                                    ft.Text(x['Producto'])
-                                ),
-                                ft.DataCell(
-                                    ft.Text(x['Precio'])
-                                ),
-                                ft.DataCell(
-                                    ft.Text(x['Stock'])
-                                ),
-                            ]
-                        )
-                    )
-                page.update()
-            
-        else:
-            show_data(page,datatable)
-     
     
     search_filed = ft.TextField(
         label="Buscar por nombre",
@@ -104,7 +72,7 @@ def InventarioPage(page):
         border_radius=ft.border_radius.all(10),
         border_color="white",
         label_style=ft.TextStyle(color="white"),
-        on_change=search_data
+        on_change=lambda e: search_data(e,page,search_filed,datatable)
     )
 
 
@@ -132,186 +100,7 @@ def InventarioPage(page):
         ]
 
     )
-
-    def clean_fileds():
-        producto.value = ""
-        precio.value = ""
-        stock.value = ""
-
-    def get_index(e):
-        global selected_row
-
-        if e.control.selected:
-            e.control.selected = False
-        else:
-            e.control.selected  =True
-        
-        producto_name = e.control.cells[0].content.value
-        #print(producto_name)
-        
-        for row in data.get_all_values():
-            if row['Producto'] == producto_name:
-                selected_row = row
-                break
-        #print(selected_row)
-        page.update()
-
-    def edit_filed_text(e):
-        try:
-            producto.value = selected_row['Producto']
-            precio.value = selected_row['Precio']
-            stock.value = selected_row['Stock']
-
-            page.update()
-
-        except Exception as e:
-            print(e)
-
-    #-------------------
-    """
-    CRUD SHEET
-    """
-
-    def add_data(e):
-        name_producto = producto.value
-        precio_producto = str(precio.value)
-        stock_producto = str(stock.value)
-
-        uid = generate_uid()
-
-
-        if len(name_producto) > 0 and len(precio_producto) >0 and len(stock_producto) > 0:
-            producto_exists = False
-            for row in data.get_all_values():
-                print(row["Producto"])
-                if row["Producto"] == name_producto:
-                    producto_exists = True
-                    print("Producto ya existe")
-                    break
-            if not producto_exists:
-                clean_fileds()
-                new_row = [[uid,name_producto,precio_producto,stock_producto]]
-                
-                last_row_range = data.get_last_row_range()
-                #name_producto =selected_row["Producto"]
-
-                data.write_data(last_row_range, new_row)
-                page.open(opendialog(
-                    page=page,
-                    titulo_dialogo=f"Producto Agregado",
-                    content_dialogo="Producto Agregado exitosamente"
-                ))
-                show_data(page,datatable)
-                clean_fileds()
-                page.update()
-
-    def update_data(e):
-        name_producto = producto.value
-        precio_producto = str(precio.value)
-        stock_producto = str(stock.value)
-
-        if len(name_producto) > 0 and len(precio_producto) >0 and len(stock_producto) > 0:
-            clean_fileds()
-            uid = selected_row['uid']
-            filtered_data = data.read_data_by_uid(uid)
-            if not filtered_data.empty:
-                values = [name_producto,precio_producto,stock_producto]
-                data.write_data_by_uid(uid, values)
-                name_producto =selected_row["Producto"]
-
-                page.open(opendialog(
-                    page=page,
-                    titulo_dialogo=f"Producto Actualizado",
-                    content_dialogo=f"Producto {name_producto} Actualizado"
-                ))
-
-                show_data(page,datatable)
-                clean_fileds()
-                page.update()
-
-    def delete_data(e):
-        try:
-            print(selected_row["uid"])
-            uid_selected = selected_row["uid"]
-            
-            name_producto =selected_row["Producto"]
-            data.delete_row_by_uid(uid_selected)
-            page.open(opendialog(
-                page=page,
-                titulo_dialogo=f"Producto Eliminado",
-                content_dialogo=f"Producto {name_producto} Eliminado"
-            ))
-            show_data(page,datatable)
-            page.update()
-        except Exception as e:
-            print(e)
     
-    def on_delete_click(e):
-        page.open(show_delete_confirmation_dialog(page, on_confirm=delete_data))
-
-    #------------------------------------------
-    # Handlers Exportacion
-    #------------------------------------------
-    def on_save_location_selected_pdf(e):
-        from datetime import datetime
-        if e.path:
-            folder_path = e.path
-            print(folder_path)
-            now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            file_path = f"{folder_path}/db_inventario_{now}.pdf"
-            #ave_pdf(path=file_path)
-
-            pdf = PDF()
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-
-            column_widths = [40, 40, 40]
-            header = ["Producto", "Precio", "Stock"]
-            for i, col_name in enumerate(header):
-                pdf.cell(column_widths[i], 10, col_name, 1, 0, "C")
-            pdf.ln()
-            data_ = data.get_all_values()
-            for row in data_:
-                pdf.cell(column_widths[0], 10, row["Producto"], 1)
-                pdf.cell(column_widths[1], 10, str(row["Precio"]), 1)
-                pdf.cell(column_widths[2], 10, str(row["Stock"]), 1)
-                pdf.ln()
-
-            # Save the PDF
-            pdf.output(file_path)
-
-            
-
-            print("Guardado exitosamente")
-            page.update()
-    
-    def on_save_location_selected_excel(e):
-        from datetime import datetime
-        if e.path:
-            folder_path = e.path
-            #print(folder_path)
-            now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            file_path = f"{folder_path}/db_inventario_{now}.xlsx"
-
-            data_ = data.get_all_values()
-
-            df = pd.DataFrame(data_, columns=["Producto", "Precio", "Stock"])
-            df.to_excel(file_path, index=False)
-
-            
-
-            print("Guardado exitosamente")
-            page.update()
-
-
-    
-    def on_export_click_pdf(e):
-        file_picker_pdf.get_directory_path()
-        
-    def on_export_click_excel(e):
-        file_picker_excel.get_directory_path()
-    #------------------------------------------
-    #------------------------------------------
 
     form = ft.Container(
         bgcolor=colors[0],
@@ -352,19 +141,19 @@ def InventarioPage(page):
                                 icon=ft.Icons.SAVE,
                                 tooltip="Guardar",
                                 icon_color=ft.Colors.WHITE,
-                                on_click=lambda e: add_data(e)
+                                on_click=lambda e: add_data(e,page,producto,precio,stock,datatable)
                             ),
                             ft.IconButton(
                                 icon=ft.Icons.UPDATE,
                                 tooltip="Actualizar",
                                 icon_color=ft.Colors.WHITE,
-                                on_click=update_data
+                                on_click=lambda e:update_data(e,page,producto,precio,stock,datatable)
                             ),
                             ft.IconButton(
                                 icon=ft.Icons.DELETE,
                                 tooltip="Borrar",
                                 icon_color=ft.Colors.WHITE,
-                                on_click=on_delete_click
+                                on_click=lambda e: on_delete_click(e,page,datatable)
                             ),
                         ]
                     )
@@ -409,19 +198,19 @@ def InventarioPage(page):
                                 icon=ft.Icons.EDIT,
                                 tooltip="Editar",
                                 icon_color="white",
-                                on_click=edit_filed_text
+                                on_click= lambda e:edit_filed_text(e,page,producto,precio,stock)
                             ),
                             ft.IconButton(
                                 icon=ft.Icons.PICTURE_AS_PDF,
                                 tooltip="Descargar en PDF",
                                 icon_color="white",
-                                on_click=on_export_click_pdf
+                                on_click=lambda e: on_export_click_pdf(e,file_picker_pdf)
                             ),
                             ft.IconButton(
                                 icon=ft.Icons.SAVE_ALT,
                                 tooltip="Descargar en EXCEL",
                                 icon_color="white",
-                                on_click=on_export_click_excel
+                                on_click=lambda e:on_export_click_excel(e,file_picker_excel)
                             ),
                         ]
                     )
@@ -459,12 +248,12 @@ def InventarioPage(page):
     
     
     
-    file_picker_pdf = ft.FilePicker(on_result=on_save_location_selected_pdf)
-    file_picker_excel = ft.FilePicker(on_result=on_save_location_selected_excel)
+    file_picker_pdf = ft.FilePicker(on_result=lambda e: on_save_location_selected_pdf(e,page,data))
+    file_picker_excel = ft.FilePicker(on_result=lambda e: on_save_location_selected_excel(e,page,data))
     page.overlay.append(file_picker_pdf)
     page.overlay.append(file_picker_excel)
     
-    show_data(page,datatable)
+    show_data(page=page,datatable=datatable)
 
     page.controls.remove(activity_indicator)
     page.update()

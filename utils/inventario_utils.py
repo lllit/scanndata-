@@ -31,13 +31,13 @@ def get_index(e,page):
         e.control.selected  =True
     
     producto_name = e.control.cells[0].content.value
-    #print(producto_name)
+    print("Producto "+producto_name)
     
     for row in data.get_all_values():
         if row['Producto'] == producto_name:
             selected_row = row
             break
-    #print(selected_row)
+    print("Select row",selected_row)
     page.update()
 
 
@@ -46,7 +46,7 @@ def show_data(page,datatable):
     for x in data.get_all_values():
         datatable.rows.append(
             ft.DataRow(
-                on_select_changed=get_index,
+                on_select_changed=lambda e: get_index(e,page=page),
                 cells=[
                     ft.DataCell(ft.Text(x["Producto"])),
                     ft.DataCell(ft.Text(x["Precio"])),
@@ -56,7 +56,7 @@ def show_data(page,datatable):
         )
     page.update()
 
-def add_data(e,page, producto, precio, stock):
+def add_data(e,page, producto, precio, stock,datatable):
     name_producto = producto.value
     precio_producto = str(precio.value)
     stock_producto = str(stock.value)
@@ -73,7 +73,7 @@ def add_data(e,page, producto, precio, stock):
                 print("Producto ya existe")
                 break
         if not producto_exists:
-            clean_fileds()
+            clean_fileds(producto,precio,stock)
             new_row = [[uid,name_producto,precio_producto,stock_producto]]
             
             last_row_range = data.get_last_row_range()
@@ -85,16 +85,18 @@ def add_data(e,page, producto, precio, stock):
                 titulo_dialogo=f"Producto Agregado",
                 content_dialogo="Producto Agregado exitosamente"
             ))
-            show_data()
-            clean_fileds()
+            show_data(page,datatable)
+            clean_fileds(producto,precio,stock)
             page.update()
 
-def update_data(e,page, producto, precio, stock):
+def update_data(e,page, producto, precio, stock,datatable):
+    global selected_row
+
     name_producto = producto.value
     precio_producto = str(precio.value)
     stock_producto = str(stock.value)
     if len(name_producto) > 0 and len(precio_producto) >0 and len(stock_producto) > 0:
-        clean_fileds()
+        clean_fileds(producto,precio,stock)
         uid = selected_row['uid']
         filtered_data = data.read_data_by_uid(uid)
         if not filtered_data.empty:
@@ -106,11 +108,11 @@ def update_data(e,page, producto, precio, stock):
                 titulo_dialogo=f"Producto Actualizado",
                 content_dialogo=f"Producto {name_producto} Actualizado"
             ))
-            show_data()
-            clean_fileds()
+            show_data(page,datatable)
+            clean_fileds(producto,precio,stock)
             page.update()
 
-def delete_data(e,page):
+def delete_data(e,page,datatable):
     try:
         print(selected_row["uid"])
         uid_selected = selected_row["uid"]
@@ -122,10 +124,57 @@ def delete_data(e,page):
             titulo_dialogo=f"Producto Eliminado",
             content_dialogo=f"Producto {name_producto} Eliminado"
         ))
-        show_data()
+        show_data(page,datatable)
         page.update()
     except Exception as e:
         print(e)
 
-def on_delete_click(e, page):
-    page.open(show_delete_confirmation_dialog(page, on_confirm=delete_data))
+def on_delete_click(e, page, datatable):
+    page.open(show_delete_confirmation_dialog(page, on_confirm=lambda _:delete_data(e,page,datatable)))
+
+
+
+def edit_filed_text(e,page, producto, precio,stock):
+    try:
+        #print(selected_row)
+        producto.value = selected_row['Producto']
+        precio.value = selected_row['Precio']
+        stock.value = selected_row['Stock']
+
+        page.update()
+
+    except Exception as e:
+        print(e)
+
+
+def search_data(e,page ,search_filed,datatable):
+    search = search_filed.value.lower()
+    producto_name = list(filter(lambda x: search in x['Producto'].lower(), data.get_all_values()))
+
+    datatable.rows = []
+    if search_filed.value !="":
+        if len(producto_name) >0:
+            for x in producto_name:
+                datatable.rows.append(
+                    ft.DataRow(
+                        on_select_changed=lambda _: get_index(e,page),
+                        cells=[
+                            ft.DataCell(
+                                ft.Text(x['Producto'])
+                            ),
+                            ft.DataCell(
+                                ft.Text(x['Precio'])
+                            ),
+                            ft.DataCell(
+                                ft.Text(x['Stock'])
+                            ),
+                        ]
+                    )
+                )
+            page.update()
+        page.update()
+        
+    else:
+        show_data(page,datatable)
+
+    page.update()

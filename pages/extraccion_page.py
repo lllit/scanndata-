@@ -43,7 +43,7 @@ def read_formulario_extract(label):
    
 
 
-def ExtractPage(page,cambiar_pagina):
+def ExtractPage(page):
     titulo = ft.Text("Funcionalidades de extracción", size=30, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_700)
 
     page.padding = 0

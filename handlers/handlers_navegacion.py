@@ -13,7 +13,7 @@ def cambiar_pagina(index, page):
     if index == 0:
         page.controls[1] = HomePage(page)
     elif index == 1:
-        page.controls[1] = ExtractPage(page,cambiar_pagina)
+        page.controls[1] = ExtractPage(page)
     elif index == 2:
         page.controls[1] = InventarioPage(page)
     elif index == 3:
