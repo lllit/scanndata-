@@ -18,7 +18,9 @@ URL_EXPORT = "files_export/"
 
 def TablesPage(page):
 
-    
+    from componentesUI.loadingUI import activity_indicator
+    page.controls.append(activity_indicator)
+    page.update()
 
     titulo = ft.Text(f"Tabla de datos", size=20, weight=ft.FontWeight.BOLD, color=ft.Colors.ORANGE_700)
 
@@ -26,13 +28,13 @@ def TablesPage(page):
 
     gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
     all_sheets = gs_general.get_all_sheets()
-    print(all_sheets)
+    #print(all_sheets)
 
     current_sheet_name = all_sheets[0]
     gs = GoogleSheet(file_name_gs, current_google_sheet, current_sheet_name)
 
 
-    print(f"Current {current_google_sheet}")
+    #print(f"Current {current_google_sheet}")
     
 
     # --------------------------------------------
@@ -98,12 +100,12 @@ def TablesPage(page):
     def on_database_selected(google_sheet):
         nonlocal current_google_sheet, gs, current_sheet_name
         try:
-            print(f"GoogleSheet {google_sheet}")
+            #print(f"GoogleSheet {google_sheet}")
             current_google_sheet = google_sheet 
             
             gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
             all_sheets = gs_general.get_all_sheets()
-            print("on_database_selected all_sheets ",all_sheets[0])
+            #print("on_database_selected all_sheets ",all_sheets[0])
             gs = GoogleSheet(file_name_gs, current_google_sheet, all_sheets[0])
             
             
@@ -112,7 +114,8 @@ def TablesPage(page):
             sheet_menu_items = [
                 ft.MenuItemButton(
                     content=ft.Text(sheet),
-                    on_click=on_sheet_selected
+                    on_click=on_sheet_selected,
+                    
                 ) for sheet in all_sheets
             ]
             menubartabla.controls[1].controls = sheet_menu_items
@@ -157,12 +160,14 @@ def TablesPage(page):
         rows=initial_rows,
         horizontal_lines=ft.BorderSide(1,"gray"),
         vertical_lines=ft.BorderSide(1, "gray"),
-        bgcolor=ft.Colors.with_opacity(0.4,colors[1]),
+        
         border_radius=ft.border_radius.all(10)
     )
     scrollable_table = ft.Row(
+        expand=True,
         controls=[table],
-        scroll=ft.ScrollMode.AUTO
+        scroll=ft.ScrollMode.AUTO,
+        
     )
 
     # --------------------------------------------
@@ -261,8 +266,28 @@ def TablesPage(page):
 
     ui_principal = ft.Column(
         controls=[
-            scrollable_table,
             ft.Container(
+                content=scrollable_table,
+                gradient=ft.RadialGradient(
+                    center=ft.Alignment(0,-1.25),
+                    radius=1.4,
+                    colors=[
+                        "#424454",
+                        "#393b52",
+                        "#33354a",
+                        "#2f3143",
+                        "#292b3c",
+                        "#222331",
+                        "#1a1a25",
+                        "#1a1b26",
+                        "#21222f",
+                        "#1d1e2a"
+                    ],
+                ),
+            ),
+            
+            ft.Container(
+                
                 content=ft.Row(
                     controls=[
                         ft.IconButton(
@@ -281,11 +306,29 @@ def TablesPage(page):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
+    page.controls.remove(activity_indicator)
+    page.update()
+
     return ft.Container(
+        col=8,
+        
         content=ft.Column(
             controls=[
-                ft.Row([menubartabla]),
-                ui_principal,
+                ft.Column(
+                    expand=True,
+                    scroll=ft.ScrollMode.AUTO,
+                    controls=[
+                        ft.ResponsiveRow(
+                            expand=True,
+                            controls=[
+                                menubartabla,
+                                ui_principal
+                            ]
+                        ),
+                    ]
+                ),
+                
+                
             ],
         ),
         padding=ft.padding.only(top=PADDING_TOP)

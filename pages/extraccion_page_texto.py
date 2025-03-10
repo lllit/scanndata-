@@ -11,14 +11,14 @@ from utils.llm import llm_ordenar_texto, reformular_respuesta_send
 from utils.generate_uid import generate_uid
 from utils.google_sheets_actions import GoogleSheet
 from utils.dialog import opendialog
-
+from utils.constantes import google_sheet
 
 from handlers.handlers_go_send_email import go_to_send_email_page
 
 
 
 file_name_gs = "credencials/extdata-452119-f9321e8e1617.json"
-google_sheet = "BD_ExtData"
+#google_sheet = "BD_ExtData"
 sheet_name = "facturas_boletas"
 
 def read_formulario_extract(label):
@@ -69,7 +69,7 @@ def ExtractPageText(page, cambiar_pagina_extraccion):
 
         uid = generate_uid()
 
-        google = GoogleSheet(file_name_gs, google_sheet,sheet_name)
+        google = GoogleSheet(file_name_gs, google_sheet[0],sheet_name)
 
         current_date = date.today()
 

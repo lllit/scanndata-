@@ -1,27 +1,43 @@
 import flet as ft
 from assets.styles.styles import colors
-from pages.extraccion_page import generate_uid
+from componentesUI.loadingUI import activity_indicator
+from utils.generate_uid import generate_uid
 from utils.google_sheets_actions import GoogleSheet, GoogleSheetGeneral
 from utils.constantes import file_name_gs, google_sheet
 from utils.exportacion import PDF
+from utils.dialog import opendialog, show_delete_confirmation_dialog
 
+from utils.inventario_utils import show_data
 import pandas as pd
 
 
 # MAIN DE PAGINA
 def InventarioPage(page):
 
+    page.controls.append(activity_indicator)
+    page.update()
+    
     page.title = "Inventario"
 
     global selected_row
     selected_row = None
 
-
+    
     current_google_sheet = google_sheet[1]
 
+
+
     gs_general = GoogleSheetGeneral(file_name_gs, current_google_sheet)
+    
+    #---------------------------
+    
+    
+    
+
     all_sheets = gs_general.get_all_sheets()
     
+    
+    #---------------------------
     current_sheet_name = all_sheets[0]
     # print(current_google_sheet)
     
@@ -29,22 +45,8 @@ def InventarioPage(page):
     #print(data.get_all_values())
 
     
-    
 
-    def show_data():
-        datatable.rows = []
-        for x in data.get_all_values():
-            datatable.rows.append(
-                ft.DataRow(
-                    on_select_changed=get_index,
-                    cells=[
-                        ft.DataCell(ft.Text(x["Producto"])),
-                        ft.DataCell(ft.Text(x["Precio"])),
-                        ft.DataCell(ft.Text(x["Stock"])),
-                    ]
-                )
-            )
-        page.update()
+
 
     producto = ft.TextField(
         label="Nombre",
@@ -92,7 +94,7 @@ def InventarioPage(page):
                 page.update()
             
         else:
-            show_data()
+            show_data(page,datatable)
      
     
     search_filed = ft.TextField(
@@ -136,34 +138,6 @@ def InventarioPage(page):
         precio.value = ""
         stock.value = ""
 
-    
-    def add_data(e):
-        name_producto = producto.value
-        precio_producto = str(precio.value)
-        stock_producto = str(stock.value)
-
-        uid = generate_uid()
-
-
-        if len(name_producto) > 0 and len(precio_producto) >0 and len(stock_producto) > 0:
-            producto_exists = False
-            for row in data.get_all_values():
-                print(row["Producto"])
-                if row["Producto"] == name_producto:
-                    producto_exists = True
-                    print("Producto ya existe")
-                    break
-            if not producto_exists:
-                clean_fileds()
-                new_row = [[uid,name_producto,precio_producto,stock_producto]]
-                
-                last_row_range = data.get_last_row_range()
-
-                data.write_data(last_row_range, new_row)
-                show_data()
-                clean_fileds()
-                page.update()
-
     def get_index(e):
         global selected_row
 
@@ -193,6 +167,43 @@ def InventarioPage(page):
         except Exception as e:
             print(e)
 
+    #-------------------
+    """
+    CRUD SHEET
+    """
+
+    def add_data(e):
+        name_producto = producto.value
+        precio_producto = str(precio.value)
+        stock_producto = str(stock.value)
+
+        uid = generate_uid()
+
+
+        if len(name_producto) > 0 and len(precio_producto) >0 and len(stock_producto) > 0:
+            producto_exists = False
+            for row in data.get_all_values():
+                print(row["Producto"])
+                if row["Producto"] == name_producto:
+                    producto_exists = True
+                    print("Producto ya existe")
+                    break
+            if not producto_exists:
+                clean_fileds()
+                new_row = [[uid,name_producto,precio_producto,stock_producto]]
+                
+                last_row_range = data.get_last_row_range()
+                #name_producto =selected_row["Producto"]
+
+                data.write_data(last_row_range, new_row)
+                page.open(opendialog(
+                    page=page,
+                    titulo_dialogo=f"Producto Agregado",
+                    content_dialogo="Producto Agregado exitosamente"
+                ))
+                show_data(page,datatable)
+                clean_fileds()
+                page.update()
 
     def update_data(e):
         name_producto = producto.value
@@ -206,11 +217,37 @@ def InventarioPage(page):
             if not filtered_data.empty:
                 values = [name_producto,precio_producto,stock_producto]
                 data.write_data_by_uid(uid, values)
-                show_data()
+                name_producto =selected_row["Producto"]
+
+                page.open(opendialog(
+                    page=page,
+                    titulo_dialogo=f"Producto Actualizado",
+                    content_dialogo=f"Producto {name_producto} Actualizado"
+                ))
+
+                show_data(page,datatable)
                 clean_fileds()
                 page.update()
 
+    def delete_data(e):
+        try:
+            print(selected_row["uid"])
+            uid_selected = selected_row["uid"]
+            
+            name_producto =selected_row["Producto"]
+            data.delete_row_by_uid(uid_selected)
+            page.open(opendialog(
+                page=page,
+                titulo_dialogo=f"Producto Eliminado",
+                content_dialogo=f"Producto {name_producto} Eliminado"
+            ))
+            show_data(page,datatable)
+            page.update()
+        except Exception as e:
+            print(e)
     
+    def on_delete_click(e):
+        page.open(show_delete_confirmation_dialog(page, on_confirm=delete_data))
 
     #------------------------------------------
     # Handlers Exportacion
@@ -326,7 +363,8 @@ def InventarioPage(page):
                             ft.IconButton(
                                 icon=ft.Icons.DELETE,
                                 tooltip="Borrar",
-                                icon_color=ft.Colors.WHITE
+                                icon_color=ft.Colors.WHITE,
+                                on_click=on_delete_click
                             ),
                         ]
                     )
@@ -426,6 +464,9 @@ def InventarioPage(page):
     page.overlay.append(file_picker_pdf)
     page.overlay.append(file_picker_excel)
     
-    show_data()
+    show_data(page,datatable)
+
+    page.controls.remove(activity_indicator)
+    page.update()
 
     return content

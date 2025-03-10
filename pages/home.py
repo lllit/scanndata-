@@ -6,6 +6,7 @@ from assets.styles.styles import PADDING_TOP
 
 from componentesUI.card_presentacion import card_presentacion, card_presentacion_adaptable
 
+from componentesUI.loadingUI import activity_indicator
 
 
 def interfaze_informativo():
@@ -32,9 +33,7 @@ def interfaze_informativo():
                     alignment=ft.alignment.center
                 ),
                 ft.Container(
-                    content=ft.Column(
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        alignment=ft.MainAxisAlignment.CENTER,
+                    content=ft.ResponsiveRow(
                         expand=True,
                         controls=[
                             card_presentacion_adaptable(
@@ -95,6 +94,9 @@ def interfaze_informativo():
 
 def HomePage(page):
     
+    page.controls.append(activity_indicator)
+    page.update()
+
     def saludo_bienvenida():
         return ft.Column(
             alignment=ft.MainAxisAlignment.CENTER,
@@ -105,7 +107,8 @@ def HomePage(page):
             
         )
 
-    
+    page.controls.remove(activity_indicator)
+    page.update()
     return ft.Container(
         padding=ft.padding.only(top=PADDING_TOP),
         content=ft.Column(
@@ -113,6 +116,7 @@ def HomePage(page):
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                     saludo_bienvenida(),
+                    
                 ]
             ),
         )

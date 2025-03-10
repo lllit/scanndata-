@@ -8,7 +8,8 @@ menubartabla = ft.MenuBar(
         expand=True,
         style=ft.MenuStyle(
             alignment=ft.alignment.top_left,
-            bgcolor=colors[0],
+            bgcolor=ft.ColorScheme(ft.Colors.AMBER),
+            padding=ft.padding.all(10)
         ),
         controls=[
             ft.SubmenuButton(

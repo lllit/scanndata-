@@ -4,6 +4,7 @@ from pages.tables_view import TablesPage
 from pages.calendario import CalendarPage
 from pages.inventario_page import InventarioPage
 
+from componentesUI.loadingUI import activity_indicator
 
 """
 Cambiar pagina del Navbar general
