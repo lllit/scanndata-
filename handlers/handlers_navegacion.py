@@ -1,3 +1,4 @@
+from pages.facturas_page import FacturasPage
 from pages.home import HomePage
 from pages.extraccion_page import ExtractPage
 from pages.tables_view import TablesPage
@@ -17,8 +18,10 @@ def cambiar_pagina(index, page):
     elif index == 2:
         page.controls[1] = InventarioPage(page)
     elif index == 3:
-        page.controls[1] = TablesPage(page)
+        page.controls[1] = FacturasPage(page)
     elif index == 4:
+        page.controls[1] = TablesPage(page)
+    elif index == 5:
         page.controls[1] = CalendarPage(page)
     page.update()
 
