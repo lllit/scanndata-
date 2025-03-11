@@ -1,9 +1,11 @@
 
 import pandas as pd
+
 from pypdf import PdfWriter, PageObject
 from fpdf import FPDF
 
 from docx2pdf import convert
+import fitz
 
 
 def export_data_to_csv(data, filename):
@@ -46,3 +48,16 @@ class PDF(FPDF):
         self.set_y(-15)
         self.set_font("Arial", "I", 8)
         self.cell(0,10,f"Pagina {self.page_no()}",0,0,"C")
+
+def pdf_to_image(pdf_path, output_path):
+    # Abrir el documento PDF
+    pdf_document = fitz.open(pdf_path)
+
+    # Seleccionar la primera página
+    page = pdf_document.load_page(0)
+
+    # Renderizar la página a una imagen
+    pix = page.get_pixmap()
+
+    # Guardar la imagen
+    pix.save(output_path)
