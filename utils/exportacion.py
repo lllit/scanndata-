@@ -3,6 +3,7 @@ import pandas as pd
 from pypdf import PdfWriter, PageObject
 from fpdf import FPDF
 
+from docx2pdf import convert
 
 
 def export_data_to_csv(data, filename):
@@ -30,6 +31,12 @@ def export_data_to_pdf(data, filename):
     pdf_writer.add_page(page)
     with open(filename, "wb") as f:
         pdf_writer.write(f)
+
+def export_docx_to_pdf(docx_filename, pdf_filename):
+    
+    convert(input_path=docx_filename,output_path=pdf_filename)
+    
+
 
 class PDF(FPDF):
     def header(self):
