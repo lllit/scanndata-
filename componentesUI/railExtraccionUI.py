@@ -22,6 +22,10 @@ def railExtraccionPage(page):
                     icon=ft.Icons.TRANSFORM,
                     tooltip="Extrae imagenes del PDFs"
                 ),
+                ft.FloatingActionButton(
+                    icon=ft.Icons.PICTURE_AS_PDF,
+                    tooltip="Extrae texto del PDFs"
+                ),
             ],
         )
     return rail

@@ -6,7 +6,12 @@ from fpdf import FPDF
 
 from docx2pdf import convert
 import fitz
+import pypandoc
+import aspose.words as aw
 
+from docx import Document
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 def export_data_to_csv(data, filename):
     df = pd.DataFrame(data)
@@ -35,9 +40,14 @@ def export_data_to_pdf(data, filename):
         pdf_writer.write(f)
 
 def export_docx_to_pdf(docx_filename, pdf_filename):
-    
+  
     convert(input_path=docx_filename,output_path=pdf_filename)
     
+# def export_docx_to_pdf(docx_filename, pdf_filename):
+#     doc = aw.Document(docx_filename)
+#     doc.save(pdf_filename)
+
+
 
 
 class PDF(FPDF):

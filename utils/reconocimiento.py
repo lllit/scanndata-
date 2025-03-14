@@ -55,6 +55,15 @@ def extract_text_from_pdf(pdf_path):
         print("Texto del pdf: ", text)
         return text
     
+def extract_text_all_from_pdf(pdf_path):
+    with open(pdf_path, 'rb') as file:
+        reader = PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        print("Texto del PDF: ", text)
+        return text
+    
 # Funcion para extraer imagenes de un pdf
 def extract_imagenes_pdf(file):
     reader = PdfReader(file)

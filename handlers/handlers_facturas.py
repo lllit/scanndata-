@@ -1,6 +1,12 @@
 from utils.facturas_utils import generar_factura
 
-def obtener_datos(e,page,factura_preview,nombreempresatitulo,cifnif,direccionfacturatitulo):
+def obtener_datos(e,
+                  page,
+                  factura_preview,
+                  nombreempresatitulo,
+                  cifnif,
+                  direccionfacturatitulo
+                ):
     #Faltan datos
     data_factura = {
         "nombreempresatitulo":nombreempresatitulo.value,
