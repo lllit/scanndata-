@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        .main {
+            padding: 20px;
+            background: #fff;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            text-align: right;
+            padding-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Factura</h1>
+        </div>
+    </header>
+    <div class="container">
+        <div class="main">
+            <h2>Detalles del Cliente</h2>
+            <p>Nombre: Juan Pérez</p>
+            <p>Dirección: Calle Falsa 123, Ciudad, País</p>
+            <p>Teléfono: 123-456-7890</p>
+            <h2>Detalles de la Factura</h2>
+            <p>Fecha: 15 de marzo de 2025</p>
+            <p>Número de Factura: 001</p>
+            <table>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>Producto 1</td>
+                    <td>2</td>
+                    <td>$50.00</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="total">Subtotal</td>
+                    <td>$235.00</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="total">Impuesto (10%)</td>
+                    <td>$23.50</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="total"><strong>Total</strong></td>
+                    <td><strong>$258.50</strong></td>
+                </tr>
+            </table>
+            <p>Gracias por su compra!</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -22,6 +22,7 @@ def generar_factura(page,datos, factura_preview):
                     zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "./plantillas/documento_tmp"))   
         shutil.rmtree("./plantillas/documento_tmp")
         export_docx_to_pdf("./plantillas/factura_final.docx", "./plantillas/factura_final.pdf") 
+        
         pdf_to_image("./plantillas/factura_final.pdf","./plantillas/factura_final_imagen.png")  
         factura_preview.src = "./plantillas/factura_final_imagen.png"
         page.update()   

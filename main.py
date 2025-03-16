@@ -4,10 +4,8 @@ from pages.home import HomePage
 from handlers.handlers_navegacion import cambiar_pagina
 
 from componentesUI.openmenu import create_navigation_drawer
-
 from componentesUI.appbar import appbar_principal
 from componentesUI.navbar import nav_bar
-
 from componentesUI.loadingUI import activity_indicator
 
 def main(page: ft.Page):

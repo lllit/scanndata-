@@ -5,7 +5,7 @@ def on_save_location_selected_pdf(e, page,data):
     from datetime import datetime
     if e.path:
         folder_path = e.path
-        print(folder_path)
+        #print(folder_path)
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         file_path = f"{folder_path}/db_inventario_{now}.pdf"
         #ave_pdf(path=file_path)

@@ -56,5 +56,3 @@ Se podra guardar la informacion que se requiera directamente hacia:
 
 
 
---------------
-¡Gracias por elegir ScannData!

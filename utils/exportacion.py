@@ -6,12 +6,9 @@ from fpdf import FPDF
 
 from docx2pdf import convert
 import fitz
-import pypandoc
-import aspose.words as aw
 
 from docx import Document
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+import csv
 
 def export_data_to_csv(data, filename):
     df = pd.DataFrame(data)
@@ -39,13 +36,43 @@ def export_data_to_pdf(data, filename):
     with open(filename, "wb") as f:
         pdf_writer.write(f)
 
-def export_docx_to_pdf(docx_filename, pdf_filename):
-  
-    convert(input_path=docx_filename,output_path=pdf_filename)
+## COVERTER 
+
+def export_docx_to_csv(docx_filename, csv_filename):
+    # Leer el archivo DOCX
+    doc = Document(docx_filename)
     
-# def export_docx_to_pdf(docx_filename, pdf_filename):
-#     doc = aw.Document(docx_filename)
-#     doc.save(pdf_filename)
+    # Abrir el archivo CSV para escribir
+    with open(csv_filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Iterar a través de cada párrafo en el archivo DOCX
+        for para in doc.paragraphs:
+            # Escribir cada párrafo como una fila en el archivo CSV
+            writer.writerow([para.text])
+
+
+    
+def export_csv_to_pdf(csv_filename, pdf_filename):
+    # Leer el archivo CSV
+    df = pd.read_csv(csv_filename)
+    
+    # Crear un objeto PDF
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # Establecer la fuente
+    pdf.set_font("Arial", size = 12)
+    
+    # Añadir una celda
+    for i in range(len(df)):
+        row = df.iloc[i]
+        for item in row:
+            pdf.cell(40, 10, str(item), border=1)
+        pdf.ln()
+    
+    # Guardar el PDF en un archivo
+    pdf.output(pdf_filename)
 
 
 
@@ -71,3 +98,9 @@ def pdf_to_image(pdf_path, output_path):
 
     # Guardar la imagen
     pix.save(output_path)
+
+
+
+def export_docx_to_pdf(docx_filename, pdf_filename):
+    
+    convert(input_path=docx_filename,output_path=pdf_filename)
