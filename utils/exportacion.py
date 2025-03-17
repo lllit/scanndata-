@@ -4,7 +4,6 @@ import pandas as pd
 from pypdf import PdfWriter, PageObject
 from fpdf import FPDF
 
-from docx2pdf import convert
 import fitz
 
 from docx import Document
@@ -101,6 +100,3 @@ def pdf_to_image(pdf_path, output_path):
 
 
 
-def export_docx_to_pdf(docx_filename, pdf_filename):
-    
-    convert(input_path=docx_filename,output_path=pdf_filename)

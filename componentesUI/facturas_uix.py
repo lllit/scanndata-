@@ -3,12 +3,33 @@ import flet as ft
 
 def input_factura_data(label,hint_text):
 
+    # def textbox_changed(e):
+    #     t.value = e.control.value
+    #     page.update()
+
     return ft.TextField(
         label=label,
         hint_text=hint_text,
         # width=300,
         expand=True,
-        border=ft.InputBorder.UNDERLINE
+        border=ft.InputBorder.UNDERLINE,
+        # on_change=textbox_changed
+    )
+
+def input_factura_number_data(label,hint_text):
+
+    # def textbox_changed(e):
+    #     t.value = e.control.value
+    #     page.update()
+
+    return ft.TextField(
+        label=label,
+        hint_text=hint_text,
+        # width=300,
+        expand=True,
+        border=ft.InputBorder.UNDERLINE,
+        input_filter=ft.NumbersOnlyInputFilter()
+        # on_change=textbox_changed
     )
 
 def formulario_resposive(form_iterable):

@@ -4,19 +4,10 @@ https://www.youtube.com/watch?v=_ieIlI_6xbQ&t=2267s
 
 import flet as ft
 import pandas as pd
-
-from fpdf import FPDF
-
 from componentesUI.railFacturas import railFacturas
 from pages.extraccion_imagenes_pdf import PADDING_TOP
-
-from plantillas.factura import config_invoice, create_invoice
-from utils.dialog import opendialog
-from componentesUI.facturas_uix import input_factura_data,formulario_resposive,formulario_resposive_4
-from handlers.handlers_facturas import obtener_datos,obtener_data_datos
-
-from utils.exportacion import export_data_to_csv
-from utils.generate_uid import generate_uid
+from componentesUI.facturas_uix import input_factura_data,formulario_resposive,formulario_resposive_4,input_factura_number_data
+from utils.facturas_utils import obtener_datos_input
 
 #------------------
 
@@ -46,10 +37,10 @@ def FacturasPageUI(page):
 
     #--------------
 
-    n_factura = input_factura_data("N° Factura", "N° Factura")
+    n_factura = input_factura_number_data("N° Factura", "N° Factura")
     
     fecha_factura = input_factura_data("Fecha factura","Fecha factura")
-    n_pedido = input_factura_data("N° Pedido","N° Pedido")
+    n_pedido = input_factura_number_data("N° Pedido","N° Pedido")
     fecha_venc = input_factura_data("Fecha Vencimiento","12/12/2012")
 
     """
@@ -58,18 +49,18 @@ def FacturasPageUI(page):
     titulo_detalle = ft.Text("Detalle:", weight=ft.FontWeight.BOLD, size=24)
 
     descripcionproducto1 = input_factura_data("Descripcion Producto","Descripcion Producto")
-    cant1 = input_factura_data("Cantidad producto","Cantidad producto")
-    precio1 = input_factura_data("Precio","Precio")
-    importe1 = input_factura_data("Importe","Importe")
+    cant1 = input_factura_number_data("Cantidad producto","Cantidad producto")
+    precio1 = input_factura_number_data("Precio","Precio")
+    importe1 = input_factura_number_data("Importe","Importe")
 
     
     """
     TOTALES VIEW
     """
-    subtotal_view = input_factura_data("Subtotal","Subtotal")
-    iva_view = input_factura_data("IVA", "IVA")
-    total_iva_view = input_factura_data("Total IVA","Total IVA")
-    total_view = input_factura_data("Total", "Total")
+    subtotal_view = input_factura_number_data("Subtotal","Subtotal")
+    iva_view = input_factura_number_data("IVA", "IVA")
+    total_iva_view = input_factura_number_data("Total IVA","Total IVA")
+    total_view = input_factura_number_data("Total", "Total")
 
 
     #--------------------
@@ -182,128 +173,8 @@ def FacturasPageUI(page):
         total_iva_view,
         total_view
     ]
-
-    def obtener_datos_input(e):
-        resultados_titulo = []
-        resultados_facturar_a = []
-        resultados_enviar_a = []
-        resultados_date = []
-
-
-        for lista in formularios_titulo:
-            resultados_titulo.append(lista.value)
-        for lista in formularios_facturar_a:
-            resultados_facturar_a.append(lista.value)
-        for lista in formaulario_enviar_a:
-            resultados_enviar_a.append(lista.value)
-        for lista in formulario_date:
-            resultados_date.append(lista.value)   
-        
-        all_result =  resultados_titulo + resultados_facturar_a +resultados_enviar_a+resultados_date
-
-        nombre_empresa =all_result[0]
-        cifnif_selected = all_result[1]
-        direccion_factura = all_result[2]
-
-        nombre_empresa_destinatario = all_result[3]
-        nif_destinatario = all_result[4]
-        direccion_empresa = all_result[5]
-
-        nombre_persona_destinatario = all_result[6]
-        direccion_destinatario = all_result[7]
-        n_factura = all_result[8]
-        fecha_factura_emision = all_result[9]
-        n_pedido = all_result[10]
-
-
-        
-
-        # CREACION DEL PDF    
-        pdf = FPDF()
-        fontsize_titulo = 16
-        fontsize_normal = 12
-
-        pdf.add_page()
-        logo_path = "assets/splash.jpg"
-        pdf.image(name=logo_path, x=160, y=10, w=40, h=40)
-        pdf.set_xy(10,10)
-        pdf.set_font('Arial', size=fontsize_normal)
-        pdf.cell(0,10,nombre_empresa, ln=True)
-        pdf.cell(0,10,cifnif_selected, ln=True)
-        pdf.cell(0,10,direccion_factura, ln=True)
-
-        # pdf.cell(0,10,nif_destinatario, ln=True)
-        # pdf.cell(0,10,fecha_factura_emision, ln=True)
-        pdf.ln(20)
-
-        # datos cliente
-        pdf.set_font('Arial', size=fontsize_titulo)
-        pdf.cell(0,10, txt="Factura", ln=True,align='C')
-        pdf.set_font('Arial', size=fontsize_normal)
-        pdf.cell(0,10,f"N° Factura: {n_factura}", ln=True,align='R')
-        pdf.cell(0,10,f"Fecha Factura: {fecha_factura_emision}", ln=True,align='R')
-
-
-        pdf.set_font('Arial', size=fontsize_titulo)
-        pdf.cell(0,10,f"Datos del Cliente", ln=True)
-        pdf.set_font('Arial', size=fontsize_normal)
-        pdf.cell(0,10, f"Nombre Empresa/ Individuo: {nombre_empresa_destinatario}", ln=True)
-        pdf.cell(0,10, f"NIF Empresa: {nif_destinatario}", ln=True)
-        pdf.cell(0,10, f"Direccion Empresa: {direccion_empresa}", ln=True)
-
-        pdf.cell(0,10, f"Nombre destinatario: {nombre_persona_destinatario}", ln=True)
-        pdf.cell(0,10, f"Direccion destinatario: {direccion_destinatario}", ln=True)
-        
-
-        pdf.set_font('Arial', size=fontsize_titulo)
-        pdf.cell(0,10,"Detalle de Factura", ln=True)
-
-        pdf.set_font('Arial', size=fontsize_normal)
-
-        # DETALLES DEL SERVICIO
-        
-
-        # Agregar productos dinámicamente
-        productos_data = []
-        data_total_dict = []
-        
-
-        for producto in detalle_total.controls:
-            valores = producto.content.value.split('\n')
-            productos_data.append(valores)
-            
-            
-        
-        print(productos_data)
-        pdf.set_fill_color(200, 220, 255)
-        pdf.cell(50,10, 'Detalle', border=1)
-        pdf.cell(25,10, 'Cantidad', border=1)
-        pdf.cell(20,10, 'Precio', border=1)
-        pdf.cell(20,10, 'Importe', border=1, ln=True)
-        for i in range(0, len(productos_data), 4):
-            descripcion = productos_data[i][0]
-            cantidad = productos_data[i+1][0]
-            precio = productos_data[i+2][0]
-            importe = productos_data[i+3][0]
-
-            # DETALLES DEL SERVICIO
-            
-
-            pdf.cell(50, 10, descripcion, border=1)
-            pdf.cell(25, 10, cantidad, border=1)
-            pdf.cell(20, 10, precio, border=1)
-            pdf.cell(20, 10, importe, border=1, ln=True)
-
-            # Imprimir los valores asignados
-            #print(f"Descripción: {descripcion}, Cantidad: {cantidad}, Precio: {precio}, Importe: {importe}")
-
-
-        pdf_file = f"plantillas/temp/factura_{nombre_empresa}_{nombre_persona_destinatario}.pdf"
-        pdf.output(pdf_file,'F')
-        print("Factura generada")
-
-        return all_result
-        
+    
+     
             
 
     formulario_section1 = formulario_resposive(formularios_titulo)
@@ -335,6 +206,8 @@ def FacturasPageUI(page):
         fecha_factura.value= fecha_formateada
         n_pedido.value = "001"
         fecha_venc.value = fecha_sumada_formateada
+
+        iva_view.value = 19
 
 
 
@@ -375,10 +248,21 @@ def FacturasPageUI(page):
                 ft.Container(
                     content=ft.Row(
                         controls=[
+                            
                             ft.ElevatedButton(
                                 "Generar Factura",
-                                on_click=lambda e: obtener_datos_input(e),
-                            )
+                                on_click=lambda e: obtener_datos_input(e=e,
+                                                                       page=page,
+                                                                       formularios_titulo=formularios_titulo,
+                                                                       formularios_facturar_a=formularios_facturar_a,
+                                                                       formaulario_enviar_a=formaulario_enviar_a,
+                                                                       formulario_date=formulario_date,
+                                                                       detalle_total=detalle_total,
+                                                                       iva_view=iva_view,
+                                                                       totales_view=totales_view,
+                                                                       factura_preview=factura_preview
+                                                                       )
+                            ),
                         ],
                         spacing=30,
                         alignment=ft.MainAxisAlignment.END
@@ -394,6 +278,16 @@ def FacturasPageUI(page):
                         ],
                         alignment=ft.MainAxisAlignment.CENTER
                     ),
+                ),
+                ft.Row(
+                    controls=[
+                        ft.FloatingActionButton(
+                            icon=ft.Icons.SAVE,
+                            tooltip="Guardar pdf",
+                            on_click=lambda _:print("Guardando pdf") # Esta funcion tiene que buscar la imagen, y luego al finalizar la exportacion tiene que eliminarse la imagen
+                        ),
+                    ],
+                    alignment=ft.MainAxisAlignment.END
                 )
             ]
         )
