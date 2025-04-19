@@ -12,15 +12,7 @@
 - [Función Extraction](#función-extraction)
 - [Función Proceso](#función-proceso)
 - [Demo ScannData](#demo-scanndata)
-  - [Home](#home)
-  - [Inventario](#inventario)
-  - [Extracción Home](#extracción-home)
-  - [Extracción Imágenes de PDF](#extracción-imágenes-de-pdf)
-  - [Extracción de Texto de PDF](#extracción-de-texto-de-pdf)
-  - [Generar Facturas](#generar-facturas)
-  - [Ver Inventario](#ver-inventario)
-  - [Extracción de imagen o PDF a formato de boleta](#extracción-de-imagen-o-pdf-a-formato-de-boleta)
-  - [Tablas de Google Sheet](#tablas-de-google-sheet)
+
 
 
 ## Funcionalidades Principales
@@ -116,3 +108,12 @@ Se podra guardar la informacion que se requiera directamente hacia:
 
 
 ![extraccion-home](./demo_images/tablas-db-tables.png)
+
+
+> Agregando evento al google calendar
+
+![extraccion-home](./demo_images/agregar-evento-calendar.png)
+
+<video controls autoPlay loop muted width="600">
+  <source src="https://github.com/lllit/scanndata-/raw/main/demo_images/demo-calendario.mp4?raw=true" type="video/mp4" />
+</video>
