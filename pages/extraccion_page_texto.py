@@ -99,9 +99,11 @@ def ExtractPageText(page, cambiar_pagina_extraccion):
 
             if file_path.lower().endswith('.pdf'):
                 text = extract_text_from_pdf(file_path)
+                
                 respuesta_llm = await llm_ordenar_texto(text)
             else:
                 text = extract_data_from_image(file_path)
+                
                 respuesta_llm = await llm_ordenar_texto(text)
                 
             try:

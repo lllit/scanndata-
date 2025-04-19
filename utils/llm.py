@@ -30,7 +30,7 @@ async def llm_ordenar_texto(texto: str):
         )
 
         response = generated_message.choices[0].message.content
-        print("Respuesta JSON LLM:", response)
+        #print("Respuesta JSON LLM:", response)
 
         return response
     
@@ -70,7 +70,7 @@ async def reformular_respuesta_send(texto: str):
             model="llama3-8b-8192",
         )
         response = generated_message.choices[0].message.content
-        print("Respuesta send: ",response)
+        #print("Respuesta send: ",response)
         return response
     except APIStatusError as e:
         if e.response.status_code == 413:

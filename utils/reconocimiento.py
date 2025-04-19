@@ -10,9 +10,9 @@ from PIL import Image
 
 load_dotenv()
 
-# path_exe = os.getenv("TESSERACT_CMD")
+path_exe = os.getenv("TESSERACT_CMD")
 
-# pytesseract.pytesseract.tesseract_cmd = path_exe
+pytesseract.pytesseract.tesseract_cmd = path_exe
 
 
 
@@ -33,26 +33,33 @@ if not path_exe:
 
 pytesseract.pytesseract.tesseract_cmd = path_exe
 
-print(f"Path Exe: {path_exe}")
+#print(f"Path Exe: {path_exe}")
 
 def extract_data_from_image(path_file):
-
+    # Leer la imagen en escala de grises
     grey_image = cv2.imread(path_file, cv2.IMREAD_GRAYSCALE)
+    
+    # Aplicar umbral binario
+    #_, th = cv2.threshold(grey_image, 100, 255, cv2.THRESH_BINARY)
+    _, th = cv2.threshold(grey_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    _, th = cv2.threshold(grey_image, 138,255,cv2.THRESH_BINARY)
-
-    #cv2.imshow("Ti", th)
-    #cv2.waitKey(0)
-    text = pytesseract.image_to_string(th)
+    # Guardar la imagen procesada en la raíz del proyecto
+    output_path = "imagen_procesada.png"  # Nombre del archivo exportado
+    cv2.imwrite(output_path, th)
+    print(f"Imagen exportada como: {output_path}")
+    
+    # Extraer texto usando Tesseract
+    text = pytesseract.image_to_string(image=th,lang='spa')
     print(text)
 
     return text
+
 
 def extract_text_from_pdf(pdf_path):
     with open(pdf_path, 'rb') as file:
         reader = PdfReader(file)
         text = reader.pages[0].extract_text()  # Leer solo la primera página
-        print("Texto del pdf: ", text)
+        #print("Texto del pdf: ", text)
         return text
     
 def extract_text_all_from_pdf(pdf_path):
@@ -61,7 +68,7 @@ def extract_text_all_from_pdf(pdf_path):
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\n"
-        print("Texto del PDF: ", text)
+        #print("Texto del PDF: ", text)
         return text
     
 # Funcion para extraer imagenes de un pdf
