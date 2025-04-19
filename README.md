@@ -3,6 +3,26 @@
 
 **ScannData** es tu solución integral para mantener organizada la información de boletas y facturas. Nuestra aplicación está diseñada para automatizar el escaneo de documentos PDF y la conversión de imágenes a texto, facilitando la gestión de tus documentos.
 
+
+## Índice 📌
+- [Funcionalidades Principales](#funcionalidades-principales)
+- [¿A Quién Está Dirigida?](#a-quién-está-dirigida)
+- [Mensaje de Bienvenida](#mensaje-de-bienvenida)
+- [Instalación](#instalación)
+- [Función Extraction](#función-extraction)
+- [Función Proceso](#función-proceso)
+- [Demo ScannData](#demo-scanndata)
+  - [Home](#home)
+  - [Inventario](#inventario)
+  - [Extracción Home](#extracción-home)
+  - [Extracción Imágenes de PDF](#extracción-imágenes-de-pdf)
+  - [Extracción de Texto de PDF](#extracción-de-texto-de-pdf)
+  - [Generar Facturas](#generar-facturas)
+  - [Ver Inventario](#ver-inventario)
+  - [Extracción de imagen o PDF a formato de boleta](#extracción-de-imagen-o-pdf-a-formato-de-boleta)
+  - [Tablas de Google Sheet](#tablas-de-google-sheet)
+
+
 ## Funcionalidades Principales
 
 - **Extracción de Texto**: Convierte imágenes y PDFs en texto.
@@ -56,3 +76,43 @@ Se podra guardar la informacion que se requiera directamente hacia:
 
 
 
+--------------
+## Demo ScannData
+
+>Home
+
+![Home](./demo_images/home.png)
+
+> Inventario
+
+![Inventario](./demo_images/inventario.png)
+
+> Extraccion Home
+
+![extraccion-home](./demo_images/extraccion_home.png)
+
+> Extraccion Imagenes de PDF
+
+![extraccion-home](./demo_images/extraccion-de-imagenes-en-pdf.png)
+
+> Extraccion de Texto de PDF
+
+![extraccion-home](./demo_images/extraccion-pdf-a-texto.png)
+
+> Generar Facturas
+
+![extraccion-home](./demo_images/generar_facturas.png)
+
+> Ver inventario
+
+![extraccion-home](./demo_images/inventario.png)
+
+> Extraccion de imagen o pdf a formato de boleta
+
+![extraccion-home](./demo_images/lecturas_facturas-boletas.png)
+
+
+> Tablas de Google sheet
+
+
+![extraccion-home](./demo_images/tablas-db-tables.png)
